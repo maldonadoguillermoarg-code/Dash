@@ -1,265 +1,181 @@
-# ==============================================================================
-# D.A.I. - GRIMOLDI LUXURY EDITION (INTEGRATED INTELLIGENCE)
-# Sistema de Inteligencia de Negocios - Grado Directorio
-# Estándares: Trailblaze Aesthetic + Deep Analytics + Actionable Insights
-# ==============================================================================
-
 import streamlit as st
 import pandas as pd
 import numpy as np
-import sqlite3
-import zstandard as zstd
-import os
 import plotly.graph_objects as go
+import plotly.express as px
 from datetime import datetime
 
 # ==============================================================================
-# 1. CONFIGURACIÓN ESTRUCTURAL
+# 1. CONSTANTES DE IDENTIDAD DE MARCA (CX THEME)
 # ==============================================================================
-st.set_page_config(
-    page_title="GRIMOLDI | Strategic Intelligence",
-    page_icon="✨",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+CX_THEME = {
+    "bg_card": "#E2EBEE",
+    "primary": "#086890",
+    "accent": "#CE516F",
+    "neutral": "#8A8F90",
+    "cyan": "#57C5E4",
+    "text": "#1A1F2B",
+    "white": "#FFFFFF"
+}
+
+# Template Global de Plotly (Senior Spec)
+CX_TEMPLATE = go.layout.Template(
+    layout=go.Layout(
+        font=dict(family="Inter, sans-serif", color=CX_THEME["text"]),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(l=20, r=20, t=40, b=20),
+        xaxis=dict(showgrid=False, zeroline=False, color=CX_THEME["neutral"]),
+        yaxis=dict(showgrid=True, gridcolor="#D1D9DB", zeroline=False, color=CX_THEME["neutral"]),
+        hoverlabel=dict(bgcolor=CX_THEME["white"], font_size=12, font_family="Inter")
+    )
 )
 
-if 'view' not in st.session_state: st.session_state.view = 'Home'
-if 'category' not in st.session_state: st.session_state.category = None
+# ==============================================================================
+# 2. MOTOR DE RENDERIZADO VISUAL (COMPONETIZACIÓN)
+# ==============================================================================
 
-# ==============================================================================
-# 2. MOTOR VISUAL TRAILBLAZE (CSS EXPANDIDO)
-# ==============================================================================
-def inject_trailblaze_vibe():
-    st.markdown("""
+def inject_cx_styles():
+    st.markdown(f"""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+        @import url('https://rsms.me/inter/inter.css');
+        html, body, [class*="css"] {{ font-family: 'Inter', sans-serif !important; background-color: {CX_THEME["white"]}; }}
+        .stApp {{ background-color: {CX_THEME["white"]}; }}
         
-        :root {
-            --bg-deep: #0A0A0A;
-            --accent-gold: #D4AF37;
-            --text-main: #FFFFFF;
-            --text-dim: #A0A0A0;
-            --card-bg: #161616;
-            --border-glow: rgba(212, 175, 55, 0.2);
-        }
-
-        .stApp { background-color: var(--bg-deep) !important; color: var(--text-main) !important; }
-        #MainMenu, footer, header { visibility: hidden; }
-
-        .hero-container {
-            padding: 80px 50px;
-            background: linear-gradient(90deg, #0A0A0A 0%, #1a1a1a 100%);
-            border-bottom: 1px solid #333;
-            margin-bottom: 40px;
-        }
+        /* Metric Cards CX */
+        .metric-cx {{
+            background-color: {CX_THEME["bg_card"]};
+            border-radius: 12px;
+            padding: 25px;
+            border-bottom: 4px solid {CX_THEME["primary"]};
+        }}
         
-        .hero-title {
-            font-family: 'Inter', sans-serif; font-weight: 900; font-size: 5rem;
-            line-height: 1; letter-spacing: -2px; margin-bottom: 20px;
-            background: linear-gradient(to right, #FFFFFF, var(--accent-gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .metric-card-custom {
-            background: var(--card-bg); border: 1px solid #333;
-            border-radius: 4px; padding: 40px 30px; transition: all 0.4s ease;
-        }
+        /* Progress Indicator */
+        .progress-bg {{ background: #D1D9DB; border-radius: 10px; height: 10px; width: 100%; }}
+        .progress-fill {{ background: {CX_THEME["primary"]}; border-radius: 10px; height: 10px; }}
         
-        .metric-card-custom:hover {
-            border-color: var(--accent-gold); box-shadow: 0 0 30px var(--border-glow);
-        }
-
-        .metric-label {
-            color: var(--accent-gold); text-transform: uppercase;
-            font-weight: 700; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 15px;
-        }
-
-        .metric-value { font-size: 3.5rem; font-weight: 900; color: #FFF; }
-
-        .stButton>button {
-            background-color: transparent !important; color: var(--text-main) !important;
-            border: 2px solid var(--accent-gold) !important; border-radius: 0px !important;
-            padding: 1.5rem 2rem !important; font-weight: 700 !important;
-            text-transform: uppercase !important; letter-spacing: 2px !important; width: 100%;
-        }
-
-        .stButton>button:hover { background-color: var(--accent-gold) !important; color: #000 !important; }
-
-        /* Contenedores de Inteligencia */
-        .tech-box {
-            background: #111; border-left: 2px solid var(--accent-gold);
-            padding: 25px; margin-top: 20px; border-radius: 0 8px 8px 0;
-        }
-        
-        .rec-box {
-            background: rgba(212, 175, 55, 0.05); border: 1px dashed var(--accent-gold);
-            padding: 25px; margin-top: 20px; border-radius: 8px;
-        }
-
-        .stTabs [data-baseweb="tab"] { color: var(--text-dim); }
-        .stTabs [aria-selected="true"] { color: var(--accent-gold) !important; }
+        .stButton>button {{
+            background-color: {CX_THEME["primary"]} !important; color: white !important;
+            border: none !important; border-radius: 8px !important; padding: 12px !important;
+        }}
         </style>
     """, unsafe_allow_html=True)
 
-# ==============================================================================
-# 3. MOTOR DE DATOS & INTELIGENCIA DE NEGOCIO
-# ==============================================================================
-def get_kpi_intelligence(kpi_name):
-    """Retorna la explicación técnica y recomendaciones para cada KPI."""
-    intel = {
-        "Ventas vs Costos": {
-            "tech": "Análisis de dispersión temporal entre ingresos brutos y egresos operativos (OPEX + COGS). Mide la eficiencia del flujo de caja.",
-            "recs": ["Optimizar la cadena de suministro para reducir COGS en un 3%.", "Revisar contratos de servicios fijos para aplanar la curva de OPEX.", "Implementar Dynamic Pricing en picos de demanda."]
-        },
-        "Market Share por Marca": {
-            "tech": "Distribución porcentual del volumen de ventas capturado por cada marca del portafolio. Detecta canibalización interna.",
-            "recs": ["Reforzar marketing en marcas con margen > 20%.", "Identificar marcas nicho para expansión de puntos de venta.", "Descontinuar SKUs de baja rotación en marcas 'Otros'."]
-        },
-        "Ticket Promedio": {
-            "tech": "Valor medio de transacción por cliente. Indica la efectividad de las estrategias de up-selling y cross-selling.",
-            "recs": ["Implementar bundles (combos) de calzado + accesorios.", "Capacitar fuerza de venta en técnicas de sugerencia premium.", "Ajustar umbral de envío gratis para incentivar mayor compra."]
-        },
-        "Productividad": {
-            "tech": "Ratio de ventas logradas por hora hombre/vendedor. Mide la eficiencia del capital humano en el salón de ventas.",
-            "recs": ["Gamificar objetivos diarios para motivar al staff.", "Redistribuir personal según mapas de calor de tráfico en tienda.", "Automatizar tareas administrativas para liberar tiempo de venta."]
-        },
-        "Rotación de Inventario": {
-            "tech": "Frecuencia con la que el stock se renueva totalmente. Un ratio alto indica agilidad; uno bajo, capital inmovilizado.",
-            "recs": ["Liquidación agresiva de stock estancado (+180 días).", "Sincronizar pedidos con previsiones meteorológicas.", "Mejorar la precisión del picking para evitar devoluciones."]
-        }
-        # Fallback genérico para otros KPIs
-    }
-    default = {
-        "tech": "Visualización multivariable del rendimiento operativo mensual frente a objetivos estratégicos establecidos por el directorio.",
-        "recs": ["Realizar auditoría de procesos en los puntos críticos detectados.", "Ajustar el presupuesto del próximo trimestre según esta tendencia.", "Escalar las mejores prácticas de las unidades líderes."]
-    }
-    return intel.get(kpi_name, default)
+# --- FÁBRICA DE GRÁFICOS CX ---
 
-# ==============================================================================
-# 4. COMPONENTES GRÁFICOS RECUPERADOS Y MEJORADOS
-# ==============================================================================
-def draw_integrated_chart(kpi_name):
-    months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
+def chart_multi_donut():
     fig = go.Figure()
-    
-    # Lógica de renderizado según el tipo de KPI recuperado
-    if "Ventas" in kpi_name:
-        y1 = np.random.randint(150, 250, 12)
-        y2 = y1 * 0.6 + np.random.randint(5, 15, 12)
-        fig.add_trace(go.Scatter(x=months, y=y1, name='VENTAS', line=dict(color='#FFF', width=4), fill='tozeroy'))
-        fig.add_trace(go.Scatter(x=months, y=y2, name='COSTOS', line=dict(color='#D4AF37', width=2, dash='dot')))
-    
-    elif "Market Share" in kpi_name or "Marca" in kpi_name:
-        labels = ['Hush Puppies', 'Merrell', 'Kickers', 'Vans', 'Otros']
-        fig.add_trace(go.Pie(labels=labels, values=[35, 25, 15, 15, 10], hole=0.6, marker=dict(colors=['#D4AF37', '#FFF', '#555', '#222', '#888'])))
-    
-    elif "Stock" in kpi_name or "Quiebre" in kpi_name:
-        fig.add_trace(go.Bar(x=months, y=np.random.randint(70, 100, 12), name='STOCK', marker_color='#D4AF37'))
-        fig.add_trace(go.Bar(x=months, y=np.random.randint(5, 15, 12), name='QUIEBRE', marker_color='#FF4D00'))
-        fig.update_layout(barmode='stack')
-        
-    else: # Lineal estándar para el resto
-        fig.add_trace(go.Scatter(x=months, y=np.random.normal(100, 15, 12), mode='lines+markers', line=dict(color='#D4AF37', width=3)))
+    fig.add_trace(go.Pie(values=[40, 60], hole=0.8, marker=dict(colors=[CX_THEME["primary"], CX_THEME["bg_card"]]), domain={'x': [0, 1], 'y': [0, 1]}))
+    fig.add_trace(go.Pie(values=[25, 75], hole=0.6, marker=dict(colors=[CX_THEME["accent"], CX_THEME["bg_card"]]), domain={'x': [0.1, 0.9], 'y': [0.1, 0.9]}))
+    fig.update_layout(showlegend=False, template=CX_TEMPLATE, height=300)
+    return fig
 
-    fig.update_layout(
-        paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#A0A0A0'), showlegend=True,
-        margin=dict(l=0, r=0, t=30, b=0),
-        xaxis=dict(showgrid=False), yaxis=dict(showgrid=True, gridcolor='#222')
-    )
+def chart_stacked_area():
+    x = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun']
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x, y=[20, 35, 30, 45, 40, 55], fill='tozeroy', 
+                             fillcolor='rgba(87, 197, 228, 0.2)', line=dict(color=CX_THEME["cyan"], width=3)))
+    fig.update_layout(template=CX_TEMPLATE, height=300)
+    return fig
+
+def chart_rounded_bar():
+    fig = go.Figure(go.Bar(x=['T1', 'T2', 'T3', 'T4'], y=[450, 600, 550, 700], 
+                           marker=dict(color=CX_THEME["primary"]), width=0.5))
+    fig.update_layout(template=CX_TEMPLATE, height=300)
+    return fig
+
+def chart_stepped():
+    fig = go.Figure(go.Scatter(x=[1, 2, 3, 4, 5], y=[10, 15, 15, 25, 20], line_shape='hv', 
+                               line=dict(color=CX_THEME["accent"], width=3)))
+    fig.update_layout(template=CX_TEMPLATE, height=300)
+    return fig
+
+def chart_dual_line():
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=list(range(10)), y=np.random.randint(10,20,10), mode='lines+markers', name='Real', line=dict(color=CX_THEME["primary"])))
+    fig.add_trace(go.Scatter(x=list(range(10)), y=np.random.randint(10,20,10), mode='lines', name='Target', line=dict(color=CX_THEME["neutral"], dash='dot')))
+    fig.update_layout(template=CX_TEMPLATE, height=300)
+    return fig
+
+def chart_gauge(value):
+    fig = go.Figure(go.Indicator(
+        mode = "gauge+number", value = value,
+        gauge = {'axis': {'range': [0, 100]}, 'bar': {'color': CX_THEME["primary"]}},
+        title = {'text': "Eficiencia %", 'font': {'size': 14}}
+    ))
+    fig.update_layout(template=CX_TEMPLATE, height=250)
     return fig
 
 # ==============================================================================
-# 5. RENDERIZADO DE CAPAS
+# 3. ORQUESTACIÓN DE VISTAS
 # ==============================================================================
 
-def render_home():
-    st.markdown("""
-        <div class="hero-container">
-            <div class="metric-label">Grimoldi S.A. | Executive Intelligence</div>
-            <h1 class="hero-title">RESULTS<br>IN RESIDENCE.</h1>
-            <p style="font-size: 1.5rem; color: #A0A0A0; max-width: 600px;">
-                Dashboard de alta fidelidad. Recuperación total de KPIs operativos bajo el nuevo estándar visual de directorio.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
+def render_cx_home():
+    st.markdown(f"<h1 style='color:{CX_THEME["primary"]}; font-weight:800;'>Executive Reporting CX</h1>", unsafe_allow_html=True)
+    
+    # KPIs con Progress Indicators (Req 3.5)
+    cols = st.columns(4)
+    metrics = [("Ventas", 85), ("Margen", 62), ("Stock", 40), ("RRHH", 90)]
+    for i, (label, val) in enumerate(metrics):
+        with cols[i]:
+            st.markdown(f"""
+                <div class="metric-cx">
+                    <p style="color:{CX_THEME["neutral"]}; margin:0;">{label}</p>
+                    <h2 style="margin:0;">{val}%</h2>
+                    <div class="progress-bg"><div class="progress-fill" style="width:{val}%"></div></div>
+                </div>
+            """, unsafe_allow_html=True)
 
-    m1, m2, m3 = st.columns(3)
-    with m1: 
-        st.markdown('<div class="metric-card-custom"><div class="metric-label">ROI GLOBAL</div><div class="metric-value">28.4%</div><div style="color:#00D924">+3.2% ↑</div></div>', unsafe_allow_html=True)
-    with m2:
-        st.markdown('<div class="metric-card-custom"><div class="metric-label">EBITDA</div><div class="metric-value">$18.2M</div><div style="color:#00D924">+5.4% ↑</div></div>', unsafe_allow_html=True)
-    with m3:
-        st.markdown('<div class="metric-card-custom"><div class="metric-label">LIQUIDEZ</div><div class="metric-value">1.65</div><div style="color:#FF4D00">-0.1% ↓</div></div>', unsafe_allow_html=True)
+    st.markdown("---")
+    
+    # Galería de Componentes CX Solicitados
+    col_left, col_right = st.columns(2)
+    
+    with col_left:
+        st.subheader("Multi-Donut Concentric (Market Share)")
+        st.plotly_chart(chart_multi_donut(), use_container_width=True)
+        
+        st.subheader("Stacked Area (Tendencia)")
+        st.plotly_chart(chart_stacked_area(), use_container_width=True)
 
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    c1, c2, c3 = st.columns(3)
-    for i, (label, view) in enumerate([("01. COMERCIAL", "Comercial"), ("02. CAPITAL HUMANO", "Capital Humano"), ("03. LOGÍSTICA", "Logística")]):
-        with [c1, c2, c3][i]:
-            if st.button(label):
-                st.session_state.view = 'Category'
-                st.session_state.category = view
-                st.rerun()
+    with col_right:
+        st.subheader("Ascending Bar Series (Desempeño)")
+        fig_asc = px.bar(x=['A', 'B', 'C', 'D'], y=[10, 25, 45, 80], text_auto=True)
+        fig_asc.update_traces(marker_color=CX_THEME["primary"])
+        fig_asc.update_layout(template=CX_TEMPLATE, height=300)
+        st.plotly_chart(fig_asc, use_container_width=True)
+        
+        st.subheader("Dual-Line Graph with Markers")
+        st.plotly_chart(chart_dual_line(), use_container_width=True)
 
-def render_category():
+def render_deep_dive():
     cat = st.session_state.category
+    st.markdown(f"<h2 style='color:{CX_THEME["primary"]}'>{cat} | Deep Dive</h2>", unsafe_allow_html=True)
     
-    # Navegación Superior
-    col_t, col_b = st.columns([4, 1])
-    with col_t: st.markdown(f"<h1 style='font-weight:900; font-size:4rem;'>{cat.upper()}</h1>", unsafe_allow_html=True)
-    with col_b: 
-        if st.button("CLOSE X"):
-            st.session_state.view = 'Home'
-            st.rerun()
-
-    # Recuperación de los 4 KPIs por categoría
-    kpis_config = {
-        "Comercial": ["Ventas vs Costos", "Market Share por Marca", "Ticket Promedio", "Tasa de Conversión"],
-        "Capital Humano": ["Productividad", "Ratio Payroll/Ventas", "Ausentismo", "Rotación"],
-        "Logística": ["Rotación de Inventario", "Lead Time Distribución", "Flete sobre Venta", "Stock vs Quiebre"]
-    }
-
-    tabs = st.tabs(kpis_config[cat])
+    c1, c2 = st.columns(2)
+    with c1:
+        st.write("**Métricas de Cambio de Estado (Stepped)**")
+        st.plotly_chart(chart_stepped(), use_container_width=True)
+    with c2:
+        st.write("**Indicador Gauge de KPI**")
+        st.plotly_chart(chart_gauge(78), use_container_width=True)
     
-    for i, kpi_name in enumerate(kpis_config[cat]):
-        with tabs[i]:
-            st.markdown(f"<h2 style='color:#FFF; margin-top:30px;'>{kpi_name}</h2>", unsafe_allow_html=True)
-            
-            # Layout: Gráfico Principal
-            st.plotly_chart(draw_integrated_chart(kpi_name), use_container_width=True)
-            
-            # Bloques de Inteligencia solicitados
-            intel = get_kpi_intelligence(kpi_name)
-            
-            col_inf1, col_inf2 = st.columns(2)
-            with col_inf1:
-                st.markdown(f"""
-                    <div class="tech-box">
-                        <h4 style="color:var(--accent-gold); margin-top:0;">🔍 EXPLICACIÓN TÉCNICA</h4>
-                        <p style="color:var(--text-dim); font-size:0.95rem;">{intel['tech']}</p>
-                    </div>
-                """, unsafe_allow_html=True)
-            
-            with col_inf2:
-                recs_html = "".join([f"<li>{r}</li>" for r in intel['recs']])
-                st.markdown(f"""
-                    <div class="rec-box">
-                        <h4 style="color:var(--accent-gold); margin-top:0;">💡 RECOMENDACIONES ESTRATÉGICAS</h4>
-                        <ul style="color:var(--text-main); font-size:0.95rem; padding-left:20px;">
-                            {recs_html}
-                        </ul>
-                    </div>
-                """, unsafe_allow_html=True)
+    if st.button("↩ Volver"):
+        st.session_state.view = 'Home'
+        st.rerun()
 
-# ==============================================================================
-# 6. ORQUESTADOR
-# ==============================================================================
 def main():
-    inject_trailblaze_vibe()
+    inject_cx_styles()
+    if 'view' not in st.session_state: st.session_state.view = 'Home'
+    
     if st.session_state.view == 'Home':
-        render_home()
+        render_cx_home()
+        if st.button("IR A DETALLE COMERCIAL"):
+            st.session_state.view = 'Detail'
+            st.session_state.category = 'Comercial'
+            st.rerun()
     else:
-        render_category()
+        render_deep_dive()
 
 if __name__ == "__main__":
     main()
