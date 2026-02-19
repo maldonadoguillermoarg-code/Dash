@@ -14,3 +14,4 @@ zstandard==0.22.0
 # --- Visualización de Alta Fidelidad (Estándar 2) ---
 # Usamos graph_objects para el control total del estilo Stripe
 plotly==5.18.0
+pandas
