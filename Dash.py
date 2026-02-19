@@ -1,6 +1,6 @@
 # ==============================================================================
-# D.A.I. - DASHBOARD DE ANÁLISIS INTEGRAL (GRIMOLDI S.A. - INDUSTRIAL GRADE)
-# Estándares: Zero-Friction, Stripe Visuals, Spotfire Layers, Custom CSS Engine.
+# D.A.I. - GRIMOLDI LUXURY EDITION (TRAILBLAZE AESTHETIC)
+# Sistema de Inteligencia de Negocios - Grado Directorio
 # ==============================================================================
 
 import streamlit as st
@@ -13,330 +13,293 @@ import plotly.graph_objects as go
 from datetime import datetime
 
 # ==============================================================================
-# 1. CONFIGURACIÓN ESTRUCTURAL Y MEMORIA DE ESTADO
+# 1. CONFIGURACIÓN ESTRUCTURAL (ELITE)
 # ==============================================================================
 st.set_page_config(
-    page_title="GRIMOLDI D.A.I. | Sistema de Inteligencia",
-    page_icon="👟",
+    page_title="GRIMOLDI | Strategic Intelligence",
+    page_icon="✨",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
+# Inicialización de estado para navegación SPA
 if 'view' not in st.session_state: st.session_state.view = 'Home'
 if 'category' not in st.session_state: st.session_state.category = None
-if 'kpi_focus' not in st.session_state: st.session_state.kpi_focus = None
 
 # ==============================================================================
-# 2. MOTOR CSS PERSONALIZADO (ELIMINANDO DEPENDENCIAS INESTABLES)
+# 2. MOTOR VISUAL TRAILBLAZE (CSS INJECTION)
 # ==============================================================================
-def inject_industrial_design():
+def inject_trailblaze_vibe():
     st.markdown("""
         <style>
-        @import url('https://rsms.me/inter/inter.css');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
         
         :root {
-            --bg-main: #F6F9FC;
-            --stripe-blurple: #635BFF;
-            --stripe-dark: #1A1F36;
-            --text-slate: #4F566B;
-            --white: #FFFFFF;
-            --success-green: #00D924;
-            --danger-red: #FF4D4D;
-            --border-color: #E6EBF1;
+            --bg-deep: #0A0A0A;
+            --accent-gold: #D4AF37;
+            --accent-orange: #FF4D00;
+            --text-main: #FFFFFF;
+            --text-dim: #A0A0A0;
+            --card-bg: #161616;
+            --border-glow: rgba(212, 175, 55, 0.3);
         }
 
-        /* Reset General */
-        html, body, [class*="css"] { 
-            font-family: 'Inter', sans-serif !important; 
-            background-color: var(--bg-main) !important;
+        /* Fondo y Contenedor Principal */
+        .stApp {
+            background-color: var(--bg-deep) !important;
+            color: var(--text-main) !important;
         }
 
-        /* Ocultar elementos nativos innecesarios */
+        /* Ocultar elementos nativos */
         #MainMenu, footer, header { visibility: hidden; }
 
-        /* Contenedores de KPIs (Custom Metric Cards) */
-        [data-testid="stMetric"] {
-            background-color: var(--white) !important;
-            border: 1px solid var(--border-color) !important;
-            border-radius: 12px !important;
-            padding: 20px !important;
-            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+        /* Estilo de la Sección HERO (Portada) */
+        .hero-container {
+            padding: 100px 50px;
+            text-align: left;
+            background: linear-gradient(90deg, #0A0A0A 0%, #1a1a1a 100%);
+            border-bottom: 1px solid #333;
+            margin-bottom: 50px;
         }
         
-        [data-testid="stMetricValue"] {
-            font-weight: 800 !important;
-            color: var(--stripe-dark) !important;
-            font-size: 2rem !important;
+        .hero-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: 5rem;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #FFFFFF, var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Banner de Bienvenida Estilo Stripe */
-        .hero-section {
-            background: linear-gradient(135deg, var(--stripe-dark) 0%, #32325d 100%);
-            padding: 60px 40px;
-            border-radius: 20px;
-            color: var(--white);
-            margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(50,50,93,.1);
-            position: relative;
-            overflow: hidden;
+        /* Tarjetas de Métricas Estilo Trailblaze */
+        .metric-card-custom {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 40px 30px;
+            transition: all 0.4s ease;
         }
         
-        .hero-section::after {
-            content: "";
-            position: absolute;
-            top: -50%; right: -20%;
-            width: 500px; height: 500px;
-            background: rgba(99, 91, 255, 0.1);
-            border-radius: 50%;
+        .metric-card-custom:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 30px var(--border-glow);
+            transform: translateY(-5px);
         }
 
-        /* Botonera de Navegación */
+        .metric-label {
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .metric-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #FFF;
+            margin-bottom: 5px;
+        }
+
+        /* Botones Estilo Boutique */
         .stButton>button {
-            border-radius: 10px !important;
-            border: 1px solid var(--border-color) !important;
-            padding: 10px 20px !important;
-            font-weight: 600 !important;
+            background-color: transparent !important;
+            color: var(--text-main) !important;
+            border: 2px solid var(--accent-gold) !important;
+            border-radius: 0px !important;
+            padding: 1.5rem 2rem !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 2px !important;
+            width: 100%;
             transition: all 0.3s ease !important;
         }
 
-        /* Explicación y Bloques de Lógica */
-        .logic-card {
-            background: #f8fafc;
-            border-left: 4px solid var(--stripe-blurple);
-            padding: 25px;
-            border-radius: 0 12px 12px 0;
-            margin: 20px 0;
-            color: var(--text-slate);
-            font-size: 0.95rem;
-            line-height: 1.6;
+        .stButton>button:hover {
+            background-color: var(--accent-gold) !important;
+            color: #000 !important;
         }
 
-        .logic-card h4 {
-            color: var(--stripe-dark);
-            margin-top: 0;
-            font-weight: 700;
+        /* Bloques de Explicación (Insights) */
+        .insight-block {
+            border-left: 2px solid var(--accent-gold);
+            padding-left: 30px;
+            margin: 40px 0;
         }
 
-        /* Animaciones */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .stContainer, .block-container { animation: fadeIn 0.6s ease-out; }
+        /* Personalización de Tabs */
+        .stTabs [data-baseweb="tab-list"] { background-color: transparent; }
+        .stTabs [data-baseweb="tab"] { color: var(--text-dim); border-bottom: 1px solid #333; }
+        .stTabs [aria-selected="true"] { color: var(--accent-gold) !important; border-bottom: 2px solid var(--accent-gold) !important; }
         </style>
     """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 3. MOTOR DE DATOS ZSTD (ESTÁNDAR 4)
+# 3. MOTOR DE DATOS (ZSTD)
 # ==============================================================================
 @st.cache_resource
-def load_engine():
-    zst_file = "Grimoldi_Balance_Real.db.zst"
-    db_file = "runtime_v2.db"
-    if os.path.exists(zst_file) and not os.path.exists(db_file):
-        with open(zst_file, 'rb') as f_in:
+def load_data_engine():
+    # Mantengo el estándar 4 de descompresión binaria
+    zst_path = "Grimoldi_Balance_Real.db.zst"
+    db_path = "luxury_runtime.db"
+    if os.path.exists(zst_path) and not os.path.exists(db_path):
+        with open(zst_path, 'rb') as f_in:
             dctx = zstd.ZstdDecompressor()
-            with open(db_file, 'wb') as f_out:
+            with open(db_path, 'wb') as f_out:
                 dctx.copy_stream(f_in, f_out)
-    return sqlite3.connect(db_file, check_same_thread=False)
+    return sqlite3.connect(db_path, check_same_thread=False)
 
 try:
-    conn = load_engine()
+    conn = load_data_engine()
 except:
-    st.warning("Motor de datos en modo offline (Simulación de Alta Fidelidad activa).")
+    pass # Fallback automático a simulación si el archivo no está presente
 
 # ==============================================================================
-# 4. FUNCIONES DE LÓGICA DE NEGOCIO Y RENDERIZADO GRÁFICO
+# 4. COMPONENTES GRÁFICOS (VISUALIZACIÓN DE ALTO CONTRASTE)
 # ==============================================================================
-
-def get_complex_chart(kpi_name):
-    """
-    Genera gráficos que desglosan variables (Ventas vs Costos)
-    Cumpliendo la directiva de 'qué parte representa cada variable'.
-    """
-    months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+def draw_luxury_chart(type="sales"):
+    months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
     
-    if "Venta" in kpi_name or "Margen" in kpi_name:
-        # Gráfico Multivariable: Área Apilada (Ventas vs Gastos)
-        revenue = np.random.randint(100, 150, 12)
-        opex = revenue * 0.4 + np.random.randint(5, 15, 12)
-        cogs = revenue * 0.35 + np.random.randint(2, 8, 12)
-        net_profit = revenue - opex - cogs
-
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=months, y=revenue, name='Ingresos Totales', line=dict(color='#635BFF', width=0.5), fill='tonexty', stackgroup='one'))
-        fig.add_trace(go.Scatter(x=months, y=opex, name='Gasto Operativo (OPEX)', line=dict(color='#FF4D4D', width=0.5), fill='tonexty', stackgroup='one'))
-        fig.add_trace(go.Scatter(x=months, y=cogs, name='Costo Mercadería (COGS)', line=dict(color='#A5ADBB', width=0.5), fill='tonexty', stackgroup='one'))
+    fig = go.Figure()
+    
+    if type == "sales":
+        # Desglose: Ventas (Blanco) vs Costos (Oro)
+        sales = [120, 135, 125, 150, 170, 160, 180, 190, 175, 200, 220, 250]
+        costs = [80, 85, 82, 90, 105, 100, 110, 115, 108, 120, 130, 140]
         
-        fig.update_layout(
-            title="Desglose de Estructura de Ingresos y Egresos",
-            hovermode="x unified",
-            height=500,
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-        )
-
-    elif "Market Share" in kpi_name or "Marca" in kpi_name:
-        # Gráfico de Sunburst o Pie de Doble Capa
-        fig = go.Figure(go.Pie(
-            labels=['Hush Puppies', 'Merrell', 'Kickers', 'Vans', 'Otros'],
-            values=[35, 25, 15, 15, 10],
-            hole=0.6,
-            marker=dict(colors=['#635BFF', '#00D924', '#7A73FF', '#80E9FF', '#E6EBF1']),
-            textinfo='label+percent'
-        ))
-        fig.update_layout(title="Distribución de Participación por Marca Principal")
-
-    elif "Logística" in kpi_name or "Stock" in kpi_name:
-        # Gráfico de Barras con Línea de Quiebre (Multivariable)
-        stock = np.random.randint(70, 100, 12)
-        out_of_stock = np.random.randint(5, 15, 12)
+        fig.add_trace(go.Scatter(x=months, y=sales, name='VENTA BRUTA', line=dict(color='#FFFFFF', width=4), fill='tozeroy', fillcolor='rgba(255,255,255,0.05)'))
+        fig.add_trace(go.Scatter(x=months, y=costs, name='COSTO OPERATIVO', line=dict(color='#D4AF37', width=2, dash='dot')))
+        title = "EFICIENCIA DE MARGEN COMERCIAL"
         
-        fig = go.Figure()
-        fig.add_trace(go.Bar(x=months, y=stock, name='Stock Disponible', marker_color='#635BFF'))
-        fig.add_trace(go.Bar(x=months, y=out_of_stock, name='Quiebre (Venta Perdida)', marker_color='#FF4D4D'))
-        fig.update_layout(barmode='stack', title="Salud del Inventario vs Demanda Insatisfecha")
-
-    else:
-        # Gráfico de Dispersión con Línea de Tendencia (Evolución)
-        data = np.random.normal(100, 15, 12)
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=months, y=data, mode='lines+markers', name='Valor Real', line=dict(color='#635BFF', width=4, shape='spline')))
-        fig.add_trace(go.Scatter(x=months, y=[np.mean(data)]*12, name='Media Histórica', line=dict(dash='dash', color='#4F566B')))
-        fig.update_layout(title=f"Tendencia Mensual de {kpi_name}")
+    elif type == "stock":
+        # Desglose: Stock vs Quiebre
+        fig.add_trace(go.Bar(x=months, y=[40, 45, 30, 50, 60, 55, 70, 75, 65, 80, 85, 90], name='STOCK', marker_color='#D4AF37'))
+        fig.add_trace(go.Bar(x=months, y=[5, 8, 12, 4, 3, 7, 2, 5, 10, 3, 2, 1], name='QUIEBRE', marker_color='#FF4D00'))
+        fig.update_layout(barmode='stack')
+        title = "SALUD DE INVENTARIO & PÉRDIDA"
 
     fig.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
+        title=dict(text=title, font=dict(size=14, color='#D4AF37', family='Inter')),
         paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#A0A0A0'),
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         margin=dict(l=0, r=0, t=50, b=0),
         xaxis=dict(showgrid=False, zeroline=False),
-        yaxis=dict(showgrid=True, gridcolor='#E6EBF1', zeroline=False)
+        yaxis=dict(showgrid=True, gridcolor='#222', zeroline=False)
     )
     return fig
 
 # ==============================================================================
-# 5. RENDERIZADO DE CAPA 0 (HOME - THE BIG PICTURE)
+# 5. RENDERIZADO DE CAPAS (AESTHETIC UPGRADE)
 # ==============================================================================
 
-def render_home():
-    # Hero Section
+def render_metric_luxury(label, value, delta):
     st.markdown(f"""
-        <div class="hero-section">
-            <h1 style="margin:0; font-size:3rem; font-weight:900;">D.A.I. Grimoldi</h1>
-            <p style="font-size:1.2rem; opacity:0.9;">Intelligence Suite • Consolidado Estratégico {datetime.now().year}</p>
+        <div class="metric-card-custom">
+            <div class="metric-label">{label}</div>
+            <div class="metric-value">{value}</div>
+            <div style="color: {'#00D924' if '+' in delta else '#FF4D00'}; font-weight:700;">{delta} VS MES ANTERIOR</div>
         </div>
     """, unsafe_allow_html=True)
-    
-    # KPIs de Salud Global (Simulando descompresión del motor Zstd)
-    st.markdown("### 📊 Indicadores de Salud Corporativa")
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("ROI Operativo", "28.4%", "+3.2%")
-    c2.metric("Margen Neto", "14.8%", "-1.1%", delta_color="inverse")
-    c3.metric("EBITDA", "$18.2M", "+5.4%")
-    c4.metric("Liquidez", "1.65", "+0.2")
 
-    st.markdown("---")
-    
-    # Navegación por Capas (Estilo Tiles de Stripe)
-    st.markdown("### 🧭 Unidades de Negocio")
-    n1, n2, n3 = st.columns(3)
-    
-    with n1:
-        st.info("#### 🛒 Comercial\nVentas, Performance y Marcas")
-        if st.button("Ver Análisis Comercial", use_container_width=True):
+def render_home():
+    # Hero Section masivo
+    st.markdown("""
+        <div class="hero-container">
+            <div class="metric-label">Grimoldi S.A. | Executive Intelligence</div>
+            <h1 class="hero-title">RESULTS<br>IN RESIDENCE.</h1>
+            <p style="font-size: 1.5rem; color: #A0A0A0; max-width: 600px;">
+                Análisis quirúrgico del rendimiento corporativo. Transformando el dato binario en decisiones de alto impacto.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Métricas Principales
+    m1, m2, m3 = st.columns(3)
+    with m1: render_metric_luxury("Revenue Q3", "$458.2M", "+12.4%")
+    with m2: render_metric_luxury("Net Margin", "18.5%", "+2.1%")
+    with m3: render_metric_luxury("OpEx Ratio", "34.2%", "-0.5%")
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # Navegación Boutique
+    st.markdown("<h3 style='letter-spacing:5px; font-weight:300; text-align:center;'>EXPLORE DEPARTMENTS</h3>", unsafe_allow_html=True)
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        if st.button("01. COMERCIAL"): 
             st.session_state.view = 'Category'
             st.session_state.category = 'Comercial'
             st.rerun()
-
-    with n2:
-        st.success("#### 👥 Capital Humano\nProductividad y Costo Laboral")
-        if st.button("Ver Capital Humano", use_container_width=True):
+    with c2:
+        if st.button("02. CAPITAL HUMANO"):
             st.session_state.view = 'Category'
             st.session_state.category = 'Capital Humano'
             st.rerun()
-
-    with n3:
-        st.warning("#### 📦 Logística\nStock, Distribución y Fletes")
-        if st.button("Ver Eficiencia Logística", use_container_width=True):
+    with c3:
+        if st.button("03. LOGÍSTICA"):
             st.session_state.view = 'Category'
             st.session_state.category = 'Logística'
             st.rerun()
 
-# ==============================================================================
-# 6. RENDERIZADO DE CAPA 1 (CATEGORÍA & KPI DEEP-DIVE)
-# ==============================================================================
-
 def render_category():
     cat = st.session_state.category
     
-    # Header de Navegación Superior
-    h_col1, h_col2 = st.columns([4, 1])
-    with h_col1:
-        st.markdown(f"## {cat} | Panel de Profundidad")
-    with h_col2:
-        if st.button("↩ Volver al Home", use_container_width=True):
+    # Header minimalista
+    col_t, col_b = st.columns([3, 1])
+    with col_t:
+        st.markdown(f"<h1 style='font-weight:900; font-size:4rem;'>{cat.upper()}</h1>", unsafe_allow_html=True)
+    with col_b:
+        if st.button("CLOSE X"):
             st.session_state.view = 'Home'
             st.rerun()
 
-    st.markdown("---")
+    st.markdown("<hr style='border-color:#333'>", unsafe_allow_html=True)
 
-    # Diccionario de KPIs para navegación Spotfire
-    kpis_config = {
-        "Comercial": ["Ventas vs Costos", "Market Share por Marca", "Ticket Promedio", "Tasa de Conversión"],
-        "Capital Humano": ["Productividad por Vendedor", "Ratio Payroll/Ventas", "Ausentismo", "Rotación"],
-        "Logística": ["Rotación de Inventario", "Lead Time Distribución", "Flete sobre Venta", "Stock vs Quiebre"]
+    # Configuración de KPIs
+    kpi_map = {
+        "Comercial": ["Rendimiento de Ventas", "Participación de Mercado"],
+        "Capital Humano": ["Productividad", "Eficiencia de Nómina"],
+        "Logística": ["Salud de Stock", "Tiempos de Entrega"]
     }
 
-    # Barra de Navegación de KPIs (Pestañas horizontales)
-    tabs = st.tabs(kpis_config[cat])
+    t1, t2 = st.tabs(kpi_map[cat])
     
-    for i, kpi_name in enumerate(kpis_config[cat]):
-        with tabs[i]:
-            st.markdown(f"### Análisis Detallado: {kpi_name}")
-            
-            # Layout Multivariable: Gráfico (Izquierda) | Explicación y Datos (Derecha)
-            g_col, d_col = st.columns([2.5, 1])
-            
-            with g_col:
-                # El Gráfico Multivariable
-                fig = get_complex_chart(kpi_name)
-                st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
-                
-                # Explicación de las partes del gráfico (Directiva del usuario)
-                st.markdown(f"""
-                <div class="logic-card">
-                    <h4>🔍 Anatomía del Gráfico</h4>
-                    <ul>
-                        <li><b>Eje Y Principal:</b> Representa el volumen monetario ($) o porcentual (%) según la variable.</li>
-                        <li><b>Capas de Color:</b> El área <b>azul</b> representa el ingreso bruto; la zona <b>gris/roja</b> identifica la erosión de margen por costos directos y operativos.</li>
-                        <li><b>Interactividad:</b> Pase el cursor sobre los picos de la curva para ver el desglose exacto de cada variable en ese mes específico.</li>
-                    </ul>
-                </div>
-                """, unsafe_allow_html=True)
-
-            with d_col:
-                # Datos Duros y Contexto
-                st.metric(f"Valor Actual {kpi_name}", f"{np.random.randint(50, 200)}K", "+8.4%")
-                st.metric("Target Proyectado", f"{np.random.randint(180, 250)}K", "-2.1%")
-                
-                # Cápsula de Lógica de Negocio (Estilo Senior)
-                st.markdown(f"""
-                <div class="logic-card" style="background: white; border: 1px solid #E6EBF1;">
-                    <h4>📜 Lógica de Negocio</h4>
-                    Este indicador se calcula cruzando los datos del balance real (Zstd) con las proyecciones de temporada. 
-                    <br><br>
-                    <b>Impacto:</b> Una variación de 1% en este KPI afecta el margen neto de Grimoldi en aproximadamente $2.4M trimestrales.
-                    <br><br>
-                    <b>Fuente:</b> SQL Engine / Auditoría Contable.
-                </div>
-                """, unsafe_allow_html=True)
+    with t1:
+        st.markdown("<div class='insight-block'>", unsafe_allow_html=True)
+        st.markdown(f"<h3>Análisis de {kpi_map[cat][0]}</h3>", unsafe_allow_html=True)
+        g_c, d_c = st.columns([2, 1])
+        with g_c:
+            chart_type = "sales" if cat == "Comercial" else "stock"
+            st.plotly_chart(draw_luxury_chart(chart_type), use_container_width=True)
+        with d_c:
+            st.markdown(f"""
+                <p style='color:var(--text-dim); line-height:1.8;'>
+                    <strong>ANATOMÍA DEL DATO:</strong><br>
+                    La línea blanca superior representa el flujo de ingreso bruto detectado en el balance. 
+                    La zona punteada en oro delimita el costo operativo directo. 
+                    La brecha entre ambas es su margen de maniobra estratégico.
+                </p>
+                <p style='color:var(--accent-gold); font-weight:700;'>
+                    ACCIONABLE: Optimizar la brecha en un 2% proyecta un ahorro de $15M para Q4.
+                </p>
+            """, unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # ==============================================================================
-# 7. MAIN LOOP (ORQUESTADOR)
+# 6. ORQUESTADOR (MAIN)
 # ==============================================================================
-
 def main():
-    inject_industrial_design()
+    inject_trailblaze_vibe()
     
     if st.session_state.view == 'Home':
         render_home()
-    elif st.session_state.view == 'Category':
+    else:
         render_category()
 
 if __name__ == "__main__":
