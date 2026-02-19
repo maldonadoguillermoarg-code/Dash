@@ -6,13 +6,9 @@ import plotly.express as px
 from datetime import datetime, timedelta
 
 # ==============================================================================
-# 1. CONFIGURACIÓN ESTRATÉGICA Y ZOOM OPTIMIZATION
+# 1. CX BRAND IDENTITY & GLOBAL CONFIG (ZOOM 100% OPTIMIZED)
 # ==============================================================================
-st.set_page_config(
-    page_title="GRIMOLDI CX | Intelligence System", 
-    layout="wide", 
-    initial_sidebar_state="collapsed"
-)
+st.set_page_config(page_title="GRIMOLDI CX | Intelligence", layout="wide", initial_sidebar_state="collapsed")
 
 CX_THEME = {
     "bg_card": "#E2EBEE",     # Gris azulado claro
@@ -21,16 +17,14 @@ CX_THEME = {
     "neutral": "#8A8F90",     # Gris etiquetas
     "cyan": "#57C5E4",        # Cyan comparativo
     "white": "#FFFFFF",
-    "text": "#1A1F2B",
-    "success": "#2D8A4E",
-    "warning": "#F39C12"
+    "text": "#1A1F2B"
 }
 
 if 'view' not in st.session_state: st.session_state.view = 'Home'
 if 'category' not in st.session_state: st.session_state.category = None
 
 # ==============================================================================
-# 2. MOTOR DE ESTILOS CX (CONSERVANDO LA VISUAL ORIGINAL)
+# 2. CUSTOM CSS ENGINE (CONSERVANDO TU VISUAL ORIGINAL)
 # ==============================================================================
 def inject_cx_industrial_design():
     st.markdown(f"""
@@ -42,17 +36,15 @@ def inject_cx_industrial_design():
         
         #MainMenu, footer, header {{ visibility: hidden; }}
 
-        /* CX Cards - Optimización Zoom 100% */
+        /* CX Cards - Optimización para Zoom 100% */
         .cx-card {{
             background-color: {CX_THEME["bg_card"]};
-            padding: 25px;
+            padding: 30px;
             border-radius: 16px;
             border-left: 6px solid {CX_THEME["primary"]};
             margin-bottom: 20px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
         }}
-        .cx-card:hover {{ transform: translateY(-2px); }}
 
         /* Progress Bars */
         .pg-container {{ background: #D1D9DB; border-radius: 20px; height: 12px; margin: 10px 0; overflow: hidden; }}
@@ -60,54 +52,24 @@ def inject_cx_industrial_design():
 
         /* Tipografía */
         h1, h2, h3 {{ color: {CX_THEME["primary"]}; font-weight: 800 !important; }}
-        .label-cx {{ color: {CX_THEME["neutral"]}; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }}
+        .label-cx {{ color: {CX_THEME["neutral"]}; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }}
         
-        /* Bloques de Información */
-        .info-block {{
+        /* Bloques de Explicación Detallada */
+        .data-explanation {{
             background: #F8FAFB;
             border: 1px solid #D1D9DB;
             padding: 20px;
-            border-radius: 10px;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #4A5568;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-size: 0.95rem;
+            color: {CX_THEME["text"]};
             line-height: 1.6;
-        }}
-
-        /* Tabs */
-        .stTabs [data-baseweb="tab-list"] {{ gap: 10px; }}
-        .stTabs [data-baseweb="tab"] {{
-            padding: 8px 16px; background-color: {CX_THEME["bg_card"]};
-            border-radius: 5px; color: {CX_THEME["neutral"]};
-        }}
-        .stTabs [aria-selected="true"] {{
-            background-color: {CX_THEME["primary"]} !important; color: white !important;
         }}
         </style>
     """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 3. GENERADOR DE DATOS MASIVOS (DATA ENGINE)
-# ==============================================================================
-
-@st.cache_data
-def get_massive_data():
-    data = []
-    base_date = datetime(2026, 1, 1)
-    for i in range(1000):
-        data.append({
-            "Timestamp": base_date + timedelta(hours=i),
-            "SKU_ID": f"GR-{np.random.randint(1000, 9999)}",
-            "Local": np.random.choice(["Florida 251", "Unicenter", "Alto Palermo", "E-Comm", "Córdoba Sh"]),
-            "Venta_Neta": np.random.uniform(5000, 55000),
-            "Costo_Directo": np.random.uniform(2000, 25000),
-            "Feedback_Score": np.random.randint(1, 6),
-            "Status": np.random.choice(["Validado", "Pendiente", "Error Conciliación"])
-        })
-    return pd.DataFrame(data)
-
-# ==============================================================================
-# 4. COMPONENTES GRÁFICOS (REQUISITOS CX)
+# 3. COMPONENTES DE VISUALIZACIÓN (RESTAURADOS Y COMPLETOS)
 # ==============================================================================
 
 def get_cx_template():
@@ -121,55 +83,65 @@ def get_cx_template():
         )
     )
 
-def chart_stepped(y):
-    fig = go.Figure(go.Scatter(y=y, line_shape='hv', line=dict(color=CX_THEME["accent"], width=4)))
-    fig.update_layout(template=get_cx_template(), height=300)
-    return fig
-
 def chart_multi_donut():
     fig = go.Figure()
-    fig.add_trace(go.Pie(values=[65, 35], hole=0.8, marker=dict(colors=[CX_THEME["primary"], "#D1D9DB"]), domain={'x': [0, 1], 'y': [0, 1]}))
+    fig.add_trace(go.Pie(values=[60, 40], hole=0.8, marker=dict(colors=[CX_THEME["primary"], "#D1D9DB"]), domain={'x': [0, 1], 'y': [0, 1]}))
     fig.add_trace(go.Pie(values=[45, 55], hole=0.6, marker=dict(colors=[CX_THEME["accent"], "#E2EBEE"]), domain={'x': [0.15, 0.85], 'y': [0.15, 0.85]}))
-    fig.update_layout(showlegend=False, height=300, template=get_cx_template())
+    fig.update_layout(showlegend=False, height=250, template=get_cx_template())
     return fig
 
 def chart_stacked_area(data_y):
     fig = go.Figure()
     fig.add_trace(go.Scatter(y=data_y, fill='tozeroy', fillcolor='rgba(87, 197, 228, 0.2)', 
                              line=dict(color=CX_THEME["cyan"], width=4), mode='lines'))
-    fig.update_layout(template=get_cx_template(), height=350)
+    fig.update_layout(template=get_cx_template(), height=300)
+    return fig
+
+def chart_rounded_bar(x, y):
+    fig = go.Figure(go.Bar(x=x, y=y, marker=dict(color=CX_THEME["primary"]), width=0.6))
+    fig.update_layout(template=get_cx_template(), height=300)
+    return fig
+
+def chart_stepped(y):
+    fig = go.Figure(go.Scatter(y=y, line_shape='hv', line=dict(color=CX_THEME["accent"], width=4)))
+    fig.update_layout(template=get_cx_template(), height=300)
+    return fig
+
+def chart_radial_gauge(val):
+    fig = go.Figure(go.Indicator(mode="gauge+number", value=val, 
+                                 gauge={'bar': {'color': CX_THEME["primary"]}, 'axis': {'range': [0, 100]}}))
+    fig.update_layout(height=200, template=get_cx_template())
     return fig
 
 def chart_dual_line():
     fig = go.Figure()
-    x = ["S1", "S2", "S3", "S4", "S5", "S6"]
-    fig.add_trace(go.Scatter(x=x, y=[40, 55, 42, 68, 70, 85], name="Real", line=dict(color=CX_THEME["primary"], width=4)))
-    fig.add_trace(go.Scatter(x=x, y=[45, 50, 50, 60, 65, 75], name="Target", line=dict(color=CX_THEME["neutral"], dash='dot')))
-    fig.update_layout(template=get_cx_template(), height=300, legend=dict(orientation="h", y=-0.2))
+    fig.add_trace(go.Scatter(y=[20, 35, 45, 30, 55], name="Real", line=dict(color=CX_THEME["primary"], width=4)))
+    fig.add_trace(go.Scatter(y=[25, 30, 40, 35, 50], name="Target", line=dict(color=CX_THEME["neutral"], dash='dot')))
+    fig.update_layout(template=get_cx_template(), height=300)
     return fig
 
 # ==============================================================================
-# 5. DICCIONARIO DE CONOCIMIENTO
+# 4. DATA ENGINE (1000 FILAS DE AUDITORÍA)
 # ==============================================================================
 
-KPI_INTELLIGENCE = {
-    "Ventas vs Costos": {
-        "detalle": "Análisis de la eficiencia marginal por canal de venta. El canal E-Comm muestra una erosión del 12% por costos logísticos.",
-        "tecnica": "Algoritmo de correlación Pearson entre volumen de carga y costo regional."
-    },
-    "Market Share": {
-        "detalle": "Grimoldi mantiene un 22% del market share en el segmento confort. Riesgo detectado en segmento Youth.",
-        "tecnica": "Modelado econométrico basado en tráfico en centros comerciales."
-    }
-}
+@st.cache_data
+def get_massive_audit_data():
+    base = datetime(2026, 1, 1)
+    return pd.DataFrame({
+        'Fecha': [base + timedelta(hours=i) for i in range(1000)],
+        'ID_Transaccion': [f'GR-{10000+i}' for i in range(1000)],
+        'Local': np.random.choice(["Unicenter", "Florida", "Abasto", "E-Comm", "Rosario"], 1000),
+        'Monto_Neto': np.random.uniform(5000, 75000, 1000).round(2),
+        'Estado': np.random.choice(["Validado", "Pendiente", "Error"], 1000)
+    })
 
 # ==============================================================================
-# 6. VISTA HOME
+# 5. VISTA HOME (EXECUTIVE DASHBOARD)
 # ==============================================================================
 
 def render_home():
     st.markdown("<h1>SISTEMA DE ANÁLISIS INTEGRAL (D.A.I.)</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='label-cx'>Consolidado Estratégico Grimoldi S.A. | Inteligencia de Negocio Q1 2026</p>", unsafe_allow_html=True)
+    st.markdown("<p class='label-cx'>Consolidado Estratégico Grimoldi S.A. | Q1 2026</p>", unsafe_allow_html=True)
 
     k1, k2, k3, k4 = st.columns(4)
     with k1:
@@ -187,56 +159,68 @@ def render_home():
 
     st.markdown("---")
     
-    col_l, col_r = st.columns([1, 2])
-    with col_l:
-        st.subheader("Navegación Estratégica")
+    c_left, c_right = st.columns([1, 2])
+    with c_left:
+        st.subheader("Unidades Estratégicas")
         if st.button("🛒 ÁREA COMERCIAL", use_container_width=True):
             st.session_state.view = 'Category'; st.session_state.category = 'Comercial'; st.rerun()
         if st.button("👥 CAPITAL HUMANO", use_container_width=True):
             st.session_state.view = 'Category'; st.session_state.category = 'Capital Humano'; st.rerun()
         if st.button("📦 EFICIENCIA LOGÍSTICA", use_container_width=True):
             st.session_state.view = 'Category'; st.session_state.category = 'Logística'; st.rerun()
+            
         st.markdown("<br>", unsafe_allow_html=True)
-        st.write("**Monitor de Estado Crítico (Stepped Chart)**")
+        st.write("**Monitor de Cambio de Estado (Stepped Chart)**")
         st.plotly_chart(chart_stepped([10, 10, 25, 25, 40, 35]), use_container_width=True)
 
-    with col_r:
-        st.write("**Performance Histórica Consolidada (Stacked Area)**")
-        st.plotly_chart(chart_stacked_area([12, 45, 30, 78, 60, 95, 110]), use_container_width=True)
+    with c_right:
+        st.write("**Performance Histórica (Stacked Area CX)**")
+        st.plotly_chart(chart_stacked_area([10, 25, 20, 45, 38, 55, 60]), use_container_width=True)
+        st.markdown("""
+            <div class="data-explanation">
+                <strong>Análisis de la Métrica:</strong> El crecimiento proyectado para el cierre del Q1 indica una estabilización del 15% mensual. 
+                <b>¿Por qué está bien?</b> La optimización de los canales digitales ha compensado la caída de tráfico en tiendas físicas. 
+                <b>¿Por qué está mal?</b> El costo de adquisición por cliente ha subido un 4%, erosionando el margen neto.
+            </div>
+        """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 7. VISTA CATEGORÍA
+# 6. VISTA CATEGORÍA (DEEP DIVE + RECOVERY DATA)
 # ==============================================================================
 
 def render_category():
     cat = st.session_state.category
-    st.markdown(f"<h2>{cat.upper()} | Análisis Profundo</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h2>EXPLORACIÓN: {cat.upper()}</h2>", unsafe_allow_html=True)
     if st.button("↩ VOLVER AL PANEL GLOBAL"):
         st.session_state.view = 'Home'; st.rerun()
 
-    kpi_map = {
-        "Comercial": ["Ventas vs Costos", "Market Share", "Ticket Promedio", "Churn Rate"],
-        "Capital Humano": ["Productividad", "Costo Laboral", "Ausentismo", "Capacitación"],
-        "Logística": ["Stock vs Quiebre", "Lead Time", "Flete/Venta", "Rotación"]
-    }
+    tabs = st.tabs(["Dashboard de Rendimiento", "Auditoría de Datos", "Recomendaciones Directivas"])
+    
+    with tabs[0]:
+        c1, c2 = st.columns(2)
+        with c1:
+            st.write("**Distribución Relativa (Multi-Donut)**")
+            st.plotly_chart(chart_multi_donut(), use_container_width=True)
+        with c2:
+            st.write("**Tendencia vs Target (Dual Line)**")
+            st.plotly_chart(chart_dual_line(), use_container_width=True)
 
-    tabs = st.tabs(kpi_map[cat])
-    for i, kpi in enumerate(kpi_map[cat]):
-        with tabs[i]:
-            st.markdown(f"### Métrica: {kpi}")
-            c1, c2 = st.columns([2, 1])
-            with c1:
-                if i % 2 == 0: st.plotly_chart(chart_dual_line(), use_container_width=True)
-                else: st.plotly_chart(chart_multi_donut(), use_container_width=True)
-            with c2:
-                intel = KPI_INTELLIGENCE.get(kpi, KPI_INTELLIGENCE["Ventas vs Costos"])
-                st.markdown(f'<div class="cx-card" style="padding:15px;"><p class="label-cx">DIAGNÓSTICO</p><p>{intel["detalle"]}</p></div>', unsafe_allow_html=True)
+    with tabs[1]:
+        st.markdown("#### Registro Maestro de Transacciones (1000 Filas)")
+        st.dataframe(get_massive_audit_data(), height=450, use_container_width=True)
 
-            st.markdown("#### Registro Maestro de Auditoría (1000 Registros)")
-            st.dataframe(get_massive_data(), height=400, use_container_width=True)
+    with tabs[2]:
+        st.markdown(f"""
+            <div class="cx-card">
+                <h3>Plan de Acción para {cat}</h3>
+                <p>1. <b>Optimización de Costos:</b> Reducir en un 5% el desperdicio operativo mediante auditorías cruzadas.</p>
+                <p>2. <b>Capacitación:</b> Implementar el nuevo protocolo CX en todas las sucursales del Nodo Sur.</p>
+                <p>3. <b>Tecnología:</b> Migrar los procesos de conciliación al motor Zstd para reducir el lag de datos de 24h a 1h.</p>
+            </div>
+        """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 8. ORQUESTADOR
+# 7. MAIN ORCHESTRATOR
 # ==============================================================================
 
 def main():
