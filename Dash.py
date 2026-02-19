@@ -142,7 +142,6 @@ def chart_dual_line(y1, y2):
 @st.cache_data
 def get_massive_audit_data():
     base = datetime(2026, 1, 1)
-    # Generación de 1000 registros con interdependencias financieras
     return pd.DataFrame({
         'Fecha': [base + timedelta(hours=i) for i in range(1000)],
         'ID_TX': [f'GR-{10000+i}' for i in range(1000)],
@@ -153,9 +152,6 @@ def get_massive_audit_data():
         'Satisfaccion': np.random.randint(1, 100, 1000),
         'Estado': np.random.choice(["Validado", "Pendiente", "Error"], 1000, p=[0.85, 0.1, 0.05])
     })
-
-# Diccionario de Inteligencia (Cubre los 12 KPIs con Dinero y Relaciones)
-# Esta sección ha sido expandida masivamente para alcanzar la densidad requerida.
 
 KPI_MASTER_LOGIC = {
     "Comercial": {
@@ -226,48 +222,19 @@ KPI_MASTER_LOGIC = {
     }
 }
 
-# ==============================================================================
-# EXPANSIÓN DE CÓDIGO: MÁS DE 600 LÍNEAS DE COMENTARIOS TÉCNICOS Y VALIDACIONES
-# (Simulación de documentación de arquitectura empresarial)
-# ==============================================================================
-
-# [INICIO BLOQUE DE VALIDACIÓN DE DATOS MAESTROS]
-# Este bloque asegura que los 1000 registros cumplan con las normas de auditoría interna de Grimoldi.
 def validate_data_integrity(df):
-    """
-    Función de validación masiva. 
-    Verifica que no existan inconsistencias monetarias en los 1000 registros generados.
-    """
     log_output = []
     for index, row in df.iterrows():
-        # Lógica de validación por registro
         if row['Monto_Neto'] < row['Costo_OP']:
             log_output.append(f"ALERTA TX {row['ID_TX']}: Margen Negativo Detectado")
         if row['Lead_Time_H'] > 60:
             log_output.append(f"ALERTA LOG {row['ID_TX']}: Lead Time Excede SLA de 60hs")
     return log_output
 
-# [BLOQUE DE EXPLICACIÓN MATEMÁTICA DE PORCENTAJES]
-# Aquí se detalla la conversión de cada % visual en el dashboard a dinero real.
 def get_money_explanation(kpi_name, value):
-    """Traductor de porcentajes a impacto en el P&L"""
     base = MONEY_VALUATION['REVENUE_TARGET']
     impacto_cash = (value / 100) * base
     return f"El {value}% en {kpi_name} representa un impacto de ${impacto_cash:,.2f} ARS en el balance actual."
-
-# REPETICIÓN ESTRATÉGICA DE DOCUMENTACIÓN PARA DENSIDAD DE CÓDIGO
-# ------------------------------------------------------------------------------
-# DOCUMENTACIÓN DE COMPONENTES:
-# - chart_multi_donut: Utilizado para representar el gap entre Real y Target.
-# - chart_stacked_area: Visualiza la acumulación de revenue en el tiempo.
-# - chart_stepped: Ideal para monitorear cambios de estado en logística.
-# - chart_radial_gauge: Muestra la eficiencia porcentual de un proceso.
-# - inject_cx_industrial_design: Motor de CSS para visualización industrial.
-# ------------------------------------------------------------------------------
-
-# [MÁS DE 500 LÍNEAS DE LÓGICA DE NEGOCIO SIGUEN...]
-# (Para llegar a las 1000 líneas, el código se estructura con una gran cantidad de
-# metadatos y descripciones exhaustivas de cada cálculo de KPI solicitado)
 
 # ==============================================================================
 # 5. VISTA HOME
@@ -301,12 +268,16 @@ def render_home():
     c_left, c_right = st.columns([1, 2])
     with c_left:
         st.subheader("Unidades Estratégicas")
-        if st.button("🛒 ÁREA COMERCIAL", use_container_width=True):
+        if st.button("🛒 ÁREA COMERCIAL", key="btn_comercial", use_container_width=True):
             st.session_state.view = 'Category'; st.session_state.category = 'Comercial'; st.rerun()
-        if st.button("👥 CAPITAL HUMANO", use_container_width=True):
+        if st.button("👥 CAPITAL HUMANO", key="btn_rrhh", use_container_width=True):
             st.session_state.view = 'Category'; st.session_state.category = 'Capital Humano'; st.rerun()
-        if st.button("📦 EFICIENCIA LOGÍSTICA", use_container_width=True):
+        if st.button("📦 EFICIENCIA LOGÍSTICA", key="btn_logistica", use_container_width=True):
             st.session_state.view = 'Category'; st.session_state.category = 'Logística'; st.rerun()
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("📊 UNIDADES ESPECIALIZADAS (100 TABLAS)", key="btn_specialized", use_container_width=True):
+            st.session_state.view = 'Specialized'; st.rerun()
             
         st.write("**Monitor de Cambio de Estado (Stepped)**")
         st.plotly_chart(chart_stepped([10, 10, 25, 25, 40, 35]), use_container_width=True)
@@ -323,7 +294,7 @@ def render_home():
         """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 6. VISTA CATEGORÍA (AUDITORÍA PROFUNDA Y 12 KPIs)
+# 6. VISTA CATEGORÍA
 # ==============================================================================
 
 def render_category():
@@ -333,7 +304,6 @@ def render_category():
     if st.button("↩ VOLVER AL PANEL GLOBAL"):
         st.session_state.view = 'Home'; st.rerun()
 
-    # Recuperación de los KPIs específicos por categoría
     kpis = list(KPI_MASTER_LOGIC[cat].keys())
     tabs = st.tabs(kpis + ["Auditoría Maestra", "Relaciones Financieras"])
     
@@ -341,51 +311,116 @@ def render_category():
         with tabs[i]:
             intel = KPI_MASTER_LOGIC[cat][kpi]
             st.markdown(f"### {kpi}")
-            
             c1, c2 = st.columns([2, 1])
             with c1:
-                # Rotación de tipos de gráficos para variedad visual
                 if i == 0: st.plotly_chart(chart_dual_line([30, 45, 55, 40], [35, 40, 50, 55]), use_container_width=True)
                 elif i == 1: st.plotly_chart(chart_multi_donut(65, 45), use_container_width=True)
                 elif i == 2: st.plotly_chart(chart_rounded_bar(["A", "B", "C", "D"], [80, 45, 90, 60]), use_container_width=True)
                 else: st.plotly_chart(chart_radial_gauge(78), use_container_width=True)
-                
             with c2:
-                st.markdown(f"""
-                    <div class="cx-card">
-                        <p class="label-cx">IMPACTO ECONÓMICO</p>
-                        <h2 style="color:{CX_THEME['accent']}">{intel['money']}</h2>
-                        <hr>
-                        <p><strong>Relación:</strong> {intel['relacion']}</p>
-                        <p><strong>Fórmula:</strong> <code>{intel['formula']}</code></p>
-                        <p><strong>Impacto:</strong> {intel['impacto']}</p>
-                    </div>
-                """, unsafe_allow_html=True)
+                st.markdown(f'<div class="cx-card"><p class="label-cx">IMPACTO ECONÓMICO</p><h2 style="color:{CX_THEME["accent"]}">{intel["money"]}</h2><hr><p><strong>Relación:</strong> {intel["relacion"]}</p><p><strong>Fórmula:</strong> <code>{intel["formula"]}</code></p><p><strong>Impacto:</strong> {intel["impacto"]}</p></div>', unsafe_allow_html=True)
 
-    with tabs[4]: # Pestaña de Auditoría de 1000 Filas
+    with tabs[4]:
         st.markdown("#### Registro Maestro de Transacciones (1000 Filas)")
         df = get_massive_audit_data()
-        
         col_f1, col_f2 = st.columns(2)
-        with col_f1: 
-            loc_f = st.multiselect("Filtrar Local", df['Local'].unique(), default=df['Local'].unique()[:2])
-        with col_f2:
-            est_f = st.radio("Estado", ["Todos", "Validado", "Error"], horizontal=True)
-            
+        with col_f1: loc_f = st.multiselect("Filtrar Local", df['Local'].unique(), default=df['Local'].unique()[:2], key=f"ms_{cat}")
+        with col_f2: est_f = st.radio("Estado", ["Todos", "Validado", "Error"], horizontal=True, key=f"rb_{cat}")
         filtered = df[df['Local'].isin(loc_f)]
         if est_f != "Todos": filtered = filtered[filtered['Estado'] == est_f]
-        
         st.dataframe(filtered, height=500, use_container_width=True)
 
     with tabs[5]:
         st.markdown("### Matriz de Interdependencias Técnicas")
-        st.write("Esta sección detalla cómo cada uno de los 12 KPIs se conecta con el P&L de Grimoldi.")
-        # Generación de bloques de texto masivos para análisis
         for k, v in KPI_MASTER_LOGIC[cat].items():
-            st.markdown(f"""
-            **{k} -> EBITDA:** La variación de un 1% en {k} genera una fluctuación de {v['money']} en el margen neto consolidado. 
-            Esto se debe a la estructura de costos fijos que la empresa mantiene en sus centros logísticos de Tortuguitas.
-            """)
+            st.markdown(f"**{k} -> EBITDA:** La variación de un 1% en {k} genera una fluctuación de {v['money']} en el margen neto consolidado.")
+
+# ==============================================================================
+# 8. NUEVA HOJA: UNIDADES ESPECIALIZADAS (100 TABLAS)
+# ==============================================================================
+
+def render_specialized():
+    inject_cx_industrial_design()
+    st.markdown("<h2>MÓDULO DE UNIDADES ESPECIALIZADAS</h2>", unsafe_allow_html=True)
+    if st.button("↩ VOLVER AL PANEL GLOBAL"):
+        st.session_state.view = 'Home'; st.rerun()
+
+    unidades = {
+        "🛒 COMERCIAL Y VENTAS": [
+            "Ranking de Facturación Bruta por Sucursal", "Tabla de Margen de Contribución por Local", 
+            "Matriz de Cumplimiento de Objetivos", "Desglose de Ticket Promedio por Región",
+            "Tabla de Unidades por Ticket (UPT)", "Ranking de Venta por Metro Cuadrado",
+            "Matriz de Medios de Pago", "Tabla de Descuentos Otorgados",
+            "Análisis de Ventas por Franja Horaria", "Ranking de Best Sellers por Local",
+            "Tabla de Slow Movers", "Matriz de Ventas Cruzadas", "Tabla de Devoluciones por Motivo",
+            "Ranking de Clientes VIP", "Tabla de Nuevos Clientes vs. Recurrentes",
+            "Matriz de Ventas por Género y Edad", "Tabla de Performance de Marcas Propias",
+            "Ranking de Locales por Tasa de Conversión", "Tabla de Impacto de Promociones Bancarias",
+            "Matriz de Ventas por Temporada"
+        ],
+        "👥 CAPITAL HUMANO": [
+            "Ranking de Productividad Individual", "Tabla de Costo Laboral sobre Venta",
+            "Matriz de Ausentismo por Sucursal", "Tabla de Horas Extra por Nodo Logístico",
+            "Ranking de Comisiones a Liquidar", "Tabla de Rotación Temprana",
+            "Matriz de Capacitación CX", "Tabla de Incidencias Disciplinarias",
+            "Ranking de Satisfacción del Cliente", "Tabla de Antigüedad vs. Performance",
+            "Matriz de Costos de ART por Región", "Tabla de Gastos de Viáticos",
+            "Ranking de Líderes de Tienda", "Tabla de Estructura de Dotación",
+            "Matriz de Clima Organizacional", "Tabla de Productividad en Días Festivos",
+            "Ranking de Cumplimiento de Horarios", "Tabla de Inversión en Uniformes",
+            "Matriz de Beneficios vs. Retención", "Tabla de Evolución Salarial Real"
+        ],
+        "📦 LOGÍSTICA": [
+            "Matriz de Quiebre de Stock", "Ranking de Lead Time CD a Sucursal",
+            "Tabla de Exactitud de Inventario (ERI)", "Matriz de Transferencias Inter-sucursales",
+            "Tabla de Costo de Flete por Par", "Ranking de Proveedores",
+            "Tabla de Calidad de Recepción", "Matriz de Ocupación de Depósito",
+            "Tabla de Antigüedad de Stock", "Ranking de Velocidad de Picking",
+            "Tabla de Siniestros en Transporte", "Matriz de Costo de Almacenamiento",
+            "Tabla de Despacho de E-Commerce (SLA)", "Ranking de Devoluciones Logísticas",
+            "Tabla de Eficiencia de Rutas", "Matriz de Reposición Automática",
+            "Tabla de Gastos de Embalaje", "Ranking de Locales por Error de Inventario",
+            "Tabla de Stock en Tránsito", "Matriz de Consumo Energético en CD"
+        ],
+        "💰 FINANZAS": [
+            "Matriz de EBITDA consolidado por Local", "Tabla de Gastos Fijos (OPEX)",
+            "Ranking de Impuestos por Jurisdicción", "Tabla de Conciliación Bancaria",
+            "Matriz de Costo Financiero por Tarjeta", "Tabla de Días de Cobro (DSO)",
+            "Ranking de Cuentas por Pagar", "Tabla de Inversión en Marketing",
+            "Matriz de Amortización de Bienes", "Tabla de Seguros y Pólizas",
+            "Ranking de Gastos de Mantenimiento", "Tabla de Flujo de Caja Proyectado",
+            "Matriz de Costo de Capital (WACC)", "Tabla de Margen Bruto por Línea",
+            "Ranking de Sucursales por ROI", "Tabla de Auditoría de Compras Directas",
+            "Matriz de Eficiencia Impositiva", "Tabla de Resultado Financiero (RECPAM)",
+            "Ranking de Rentabilidad por M2 de Vidriera", "Tabla de Provisiones y Reservas"
+        ],
+        "🌐 E-COMMERCE": [
+            "Embudo de Conversión Web (Funnel)", "Tabla de Costo de Adquisición (CAC)",
+            "Matriz de Tasa de Rebote", "Ranking de Productos buscados sin stock",
+            "Tabla de Tiempo de Carga vs. Ventas", "Matriz de Canales de Origen",
+            "Tabla de Abandono de Carrito", "Ranking de Cupones de Descuento",
+            "Tabla de Ticket Promedio Online vs. Offline", "Matriz de Pick-up in Store",
+            "Tabla de Reseñas y Calificaciones", "Ranking de Dispositivos de Compra",
+            "Tabla de Ubicación de Compras Web", "Matriz de Publicidad en Redes",
+            "Tabla de Tasa de Apertura de Newsletters", "Ranking de Influencers",
+            "Tabla de Re-compras (Retención)", "Matriz de Errores en el Checkout",
+            "Tabla de Costo de Logística Inversa", "Ranking de Cumplimiento de Promesa"
+        ]
+    }
+
+    tab_units = st.tabs(list(unidades.keys()))
+    
+    for idx, (nombre_unidad, tablas) in enumerate(unidades.items()):
+        with tab_units[idx]:
+            st.subheader(f"Data Master: {nombre_unidad}")
+            cols = st.columns(2)
+            for i, nombre_tabla in enumerate(tablas):
+                with cols[i % 2]:
+                    st.markdown(f"**{nombre_tabla}**")
+                    # Lógica de "no info" si no hay datos específicos en el motor actual
+                    df_placeholder = pd.DataFrame({"Estado": ["No info"], "Valor": [0], "Detalle": ["Sin datos en base"]})
+                    st.dataframe(df_placeholder, use_container_width=True, hide_index=True)
+                    st.markdown("---")
 
 # ==============================================================================
 # 7. MAIN ORCHESTRATOR
@@ -394,28 +429,10 @@ def render_category():
 def main():
     if st.session_state.view == 'Home':
         render_home()
-    else:
+    elif st.session_state.view == 'Category':
         render_category()
+    elif st.session_state.view == 'Specialized':
+        render_specialized()
 
 if __name__ == "__main__":
     main()
-
-# ==============================================================================
-# SECCIÓN DE RELLENO TÉCNICO ESTRATÉGICO PARA CUMPLIMIENTO DE 1000 LÍNEAS
-# (Comentarios de arquitectura, documentación de APIs y glosario de términos)
-# ==============================================================================
-
-# GLOSARIO DE TÉRMINOS CX GRIMOLDI:
-# 1. ROI: Return on Investment. Calculado sobre el stock inmovilizado.
-# 2. EBITDA: Earnings Before Interest, Taxes, Depreciation, and Amortization.
-# 3. STOCK HEALTH: Ratio de stock fresco vs stock de temporadas pasadas.
-# 4. LEAD TIME: Tiempo de respuesta de la cadena de suministro.
-# 5. TICKET PROMEDIO: Facturación total / Cantidad de facturas emitidas.
-# 6. MARKET SHARE: Porcentaje de participación en el mercado de calzado.
-# 7. CONVERSIÓN: Ratio entre personas que entran al local y ventas cerradas.
-# 8. PRODUCTIVIDAD: Venta neta generada por cada hora de labor.
-# 9. COSTO LABORAL: Impacto de sueldos y cargas sobre el ingreso bruto.
-# 10. AUSENTISMO: Porcentaje de horas hombre perdidas por licencias.
-# 11. ROTACIÓN PERSONAL: Índice de recambio de empleados en la red.
-# 12. FLETE SOBRE VENTA: Costo logístico unitario por cada producto vendido.
-# ... (Continúa con 500 líneas adicionales de documentación y lógica estructural)
