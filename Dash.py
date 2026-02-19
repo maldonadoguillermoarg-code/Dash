@@ -220,7 +220,7 @@ def get_money_explanation(kpi_name, value):
     return f"El {value}% en {kpi_name} representa un impacto de ${impacto_cash:,.2f} ARS en el balance actual."
 
 # ==============================================================================
-# 5. RENDER FUNCTIONS (HOME & CATEGORY)
+# 5. RENDER FUNCTIONS
 # ==============================================================================
 def render_home():
     inject_cx_industrial_design()
@@ -259,18 +259,27 @@ def render_category():
             intel = KPI_MASTER_LOGIC[cat][kpi]
             c1, c2 = st.columns([2, 1])
             with c1:
-                if i == 0: st.plotly_chart(chart_dual_line([30, 45, 55, 40], [35, 40, 50, 55]), use_container_width=True, key=f"cat_dual_{i}")
-                elif i == 1: st.plotly_chart(chart_multi_donut(65, 45), use_container_width=True, key=f"cat_donut_{i}")
-                elif i == 2: st.plotly_chart(chart_rounded_bar(["A", "B", "C", "D"], [80, 45, 90, 60]), use_container_width=True, key=f"cat_bar_{i}")
-                else: st.plotly_chart(chart_radial_gauge(78), use_container_width=True, key=f"cat_gauge_{i}")
-            with c2: st.markdown(f'<div class="cx-card"><p class="label-cx">IMPACTO ECONÓMICO</p><h2 style="color:{CX_THEME["accent"]}">{intel["money"]}</h2><hr><p><strong>Relación:</strong> {intel["relacion"]}</p></div>', unsafe_allow_html=True)
+                if i == 0: st.plotly_chart(chart_dual_line([30, 45, 55, 40], [35, 40, 50, 55]), use_container_width=True, key=f"cat_dual_{cat}_{i}")
+                elif i == 1: st.plotly_chart(chart_multi_donut(65, 45), use_container_width=True, key=f"cat_donut_{cat}_{i}")
+                elif i == 2: st.plotly_chart(chart_rounded_bar(["A", "B", "C", "D"], [80, 45, 90, 60]), use_container_width=True, key=f"cat_bar_{cat}_{i}")
+                else: st.plotly_chart(chart_radial_gauge(78), use_container_width=True, key=f"cat_gauge_{cat}_{i}")
+                
+                # CUADRO DE TEXTO RECUPERADO Y MEJORADO
+                st.markdown(f"""
+                <div class="data-explanation">
+                    <strong>DETALLE TÉCNICO: {kpi.upper()}</strong><br>
+                    <b>Impacto Económico:</b> {intel["money"]}<br>
+                    <b>Relación Estratégica:</b> {intel["relacion"]}<br>
+                    <b>Fórmula de Cálculo:</b> {intel["formula"]}<br>
+                    <b>Nivel de Impacto:</b> {intel["impacto"]}
+                </div>
+                """, unsafe_allow_html=True)
+
+            with c2: st.markdown(f'<div class="cx-card"><p class="label-cx">VALOR ACTUAL</p><h2 style="color:{CX_THEME["accent"]}">{intel["money"]}</h2><hr><p class="label-cx">IMPACTO EN Q1</p><p>{intel["impacto"]}</p></div>', unsafe_allow_html=True)
     with tabs[4]:
         df = get_massive_audit_data()
         st.dataframe(df, height=500, use_container_width=True)
 
-# ==============================================================================
-# 8. ESPECIALIZADA (REPARADA CON LAS 100 TABLAS Y DATOS REALES)
-# ==============================================================================
 def render_specialized():
     inject_cx_industrial_design()
     st.markdown("<h2>MÓDULO DE UNIDADES ESPECIALIZADAS (DATAMASTER 100)</h2>", unsafe_allow_html=True)
@@ -334,8 +343,6 @@ def render_specialized():
             for i, nombre_tabla in enumerate(tablas):
                 with cols[i % 2]:
                     st.markdown(f"**{nombre_tabla}**")
-                    
-                    # Lógica de autocompletado basada en la base de datos auditada
                     if "Facturación" in nombre_tabla or "EBITDA" in nombre_tabla or "Margen" in nombre_tabla or "Ventas" in nombre_tabla:
                         df_res = df_base.groupby('Local')['Monto_Neto'].agg(['sum', 'mean', 'count']).reset_index()
                         df_res.columns = ['Local', 'Total ($)', 'Promedio ($)', 'Tickets']
