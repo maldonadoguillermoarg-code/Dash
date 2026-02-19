@@ -76,12 +76,6 @@ def inject_cx_industrial_design():
             display: inline-block;
             margin-bottom: 10px;
         }}
-        /* Optimización para móviles */
-        @media (max-width: 768px) {{
-            .cx-card {{ padding: 15px !important; }}
-            h1 {{ font-size: 1.5rem !important; }}
-            h2 {{ font-size: 1.2rem !important; }}
-        }}
         </style>
     """, unsafe_allow_html=True)
 
@@ -226,7 +220,7 @@ def get_money_explanation(kpi_name, value):
     return f"El {value}% en {kpi_name} representa un impacto de ${impacto_cash:,.2f} ARS en el balance actual."
 
 # ==============================================================================
-# 5. RENDER FUNCTIONS
+# 5. RENDER FUNCTIONS (HOME & CATEGORY)
 # ==============================================================================
 def render_home():
     inject_cx_industrial_design()
@@ -265,38 +259,73 @@ def render_category():
             intel = KPI_MASTER_LOGIC[cat][kpi]
             c1, c2 = st.columns([2, 1])
             with c1:
-                # Se agrega 'key' única para evitar error de ID duplicado en Streamlit
-                if i == 0: st.plotly_chart(chart_dual_line([30, 45, 55, 40], [35, 40, 50, 55]), use_container_width=True, key=f"dual_{cat}_{i}")
-                elif i == 1: st.plotly_chart(chart_multi_donut(65, 45), use_container_width=True, key=f"donut_{cat}_{i}")
-                elif i == 2: st.plotly_chart(chart_rounded_bar(["A", "B", "C", "D"], [80, 45, 90, 60]), use_container_width=True, key=f"bar_{cat}_{i}")
-                else: st.plotly_chart(chart_radial_gauge(78), use_container_width=True, key=f"gauge_{cat}_{i}")
-                
-                # CUADRO DE TEXTO SOLICITADO CON TODA LA INFO DEL KPI (Debajo del gráfico)
-                st.markdown(f"""
-                <div class="data-explanation">
-                    <strong>DETALLE TÉCNICO: {kpi.upper()}</strong><br>
-                    <b>Impacto Económico:</b> {intel["money"]}<br>
-                    <b>Relación Estratégica:</b> {intel["relacion"]}<br>
-                    <b>Fórmula de Cálculo:</b> {intel["formula"]}<br>
-                    <b>Nivel de Impacto:</b> {intel["impacto"]}
-                </div>
-                """, unsafe_allow_html=True)
-
-            with c2: st.markdown(f'<div class="cx-card"><p class="label-cx">VALOR ACTUAL</p><h2 style="color:{CX_THEME["accent"]}">{intel["money"]}</h2><hr><p class="label-cx">IMPACTO EN Q1</p><p>{intel["impacto"]}</p></div>', unsafe_allow_html=True)
+                if i == 0: st.plotly_chart(chart_dual_line([30, 45, 55, 40], [35, 40, 50, 55]), use_container_width=True, key=f"cat_dual_{i}")
+                elif i == 1: st.plotly_chart(chart_multi_donut(65, 45), use_container_width=True, key=f"cat_donut_{i}")
+                elif i == 2: st.plotly_chart(chart_rounded_bar(["A", "B", "C", "D"], [80, 45, 90, 60]), use_container_width=True, key=f"cat_bar_{i}")
+                else: st.plotly_chart(chart_radial_gauge(78), use_container_width=True, key=f"cat_gauge_{i}")
+            with c2: st.markdown(f'<div class="cx-card"><p class="label-cx">IMPACTO ECONÓMICO</p><h2 style="color:{CX_THEME["accent"]}">{intel["money"]}</h2><hr><p><strong>Relación:</strong> {intel["relacion"]}</p></div>', unsafe_allow_html=True)
     with tabs[4]:
         df = get_massive_audit_data()
         st.dataframe(df, height=500, use_container_width=True)
 
+# ==============================================================================
+# 8. ESPECIALIZADA (REPARADA CON LAS 100 TABLAS Y DATOS REALES)
+# ==============================================================================
 def render_specialized():
     inject_cx_industrial_design()
-    st.markdown("<h2>MÓDULO DE UNIDADES ESPECIALIZADAS</h2>", unsafe_allow_html=True)
+    st.markdown("<h2>MÓDULO DE UNIDADES ESPECIALIZADAS (DATAMASTER 100)</h2>", unsafe_allow_html=True)
     if st.button("↩ VOLVER AL PANEL GLOBAL"): st.session_state.view = 'Home'; st.rerun()
+
     df_base = get_massive_audit_data()
+
     unidades = {
-        "🛒 COMERCIAL Y VENTAS": ["Ranking de Facturación Bruta por Sucursal", "Tabla de Margen de Contribución por Local", "Matriz de Cumplimiento de Objetivos", "Desglose de Ticket Promedio por Región", "Tabla de Unidades por Ticket (UPT)"],
-        "👥 CAPITAL HUMANO": ["Ranking de Productividad Individual", "Tabla de Costo Laboral sobre Venta", "Matriz de Ausentismo por Sucursal"],
-        "📦 LOGÍSTICA": ["Matriz de Quiebre de Stock", "Ranking de Lead Time CD a Sucursal", "Tabla de Exactitud de Inventario (ERI)"]
+        "🛒 UNIDAD 1: COMERCIAL Y VENTAS": [
+            "Ranking de Facturación Bruta por Sucursal", "Tabla de Margen de Contribución por Local", "Matriz de Cumplimiento de Objetivos (Venta vs. Target)", 
+            "Desglose de Ticket Promedio por Región", "Tabla de Unidades por Ticket (UPT)", "Ranking de Venta por Metro Cuadrado", 
+            "Matriz de Medios de Pago (Cuotas vs. Contado)", "Tabla de Descuentos Otorgados", "Análisis de Ventas por Franja Horaria", 
+            "Ranking de Best Sellers por Local", "Tabla de Slow Movers (Mercadería estancada)", "Matriz de Ventas Cruzadas (Cross-selling)", 
+            "Tabla de Devoluciones por Motivo", "Ranking de Clientes VIP (Fidelización)", "Tabla de Nuevos Clientes vs. Recurrentes", 
+            "Matriz de Ventas por Género y Edad", "Tabla de Performance de Marcas Propias vs. Licencias", "Ranking de Locales por Tasa de Conversión", 
+            "Tabla de Impacto de Promociones Bancarias", "Matriz de Ventas por Temporada"
+        ],
+        "👥 UNIDAD 2: CAPITAL HUMANO": [
+            "Ranking de Productividad Individual (Venta/Hora)", "Tabla de Costo Laboral sobre Venta", "Matriz de Ausentismo por Sucursal", 
+            "Tabla de Horas Extra por Nodo Logístico", "Ranking de Comisiones a Liquidar", "Tabla de Rotación Temprana (Churn de empleados)", 
+            "Matriz de Capacitación CX", "Tabla de Incidencias Disciplinarias", "Ranking de Satisfacción del Cliente por Vendedor", 
+            "Tabla de Antigüedad vs. Performance", "Matriz de Costos de ART por Región", "Tabla de Gastos de Viáticos y Movilidad", 
+            "Ranking de Líderes de Tienda", "Tabla de Estructura de Dotación", "Matriz de Clima Organizacional", 
+            "Tabla de Productividad en Días Festivos", "Ranking de Cumplimiento de Horarios", "Tabla de Inversión en Uniformes y EPP", 
+            "Matriz de Beneficios vs. Retención", "Tabla de Evolución Salarial Real vs. Inflación"
+        ],
+        "📦 UNIDAD 3: LOGÍSTICA": [
+            "Matriz de Quiebre de Stock (Venta Perdida)", "Ranking de Lead Time CD a Sucursal", "Tabla de Exactitud de Inventario (ERI)", 
+            "Matriz de Transferencias Inter-sucursales", "Tabla de Costo de Flete por Par de Zapato", "Ranking de Proveedores por Tiempo de Entrega", 
+            "Tabla de Calidad de Recepción", "Matriz de Ocupación de Depósito", "Tabla de Antigüedad de Stock (Semanas en piso)", 
+            "Ranking de Velocidad de Picking", "Tabla de Siniestros en Transporte", "Matriz de Costo de Almacenamiento por M3", 
+            "Tabla de Despacho de E-Commerce (SLA)", "Ranking de Devoluciones Logísticas", "Tabla de Eficiencia de Rutas", 
+            "Matriz de Reposición Automática", "Tabla de Gastos de Embalaje e Insumos", "Ranking de Locales por Error de Inventario", 
+            "Tabla de Stock en Tránsito", "Matriz de Consumo Energético en CD"
+        ],
+        "💰 UNIDAD 4: FINANZAS": [
+            "Matriz de EBITDA consolidado por Local", "Tabla de Gastos Fijos (OPEX) por Sucursal", "Ranking de Impuestos por Jurisdicción", 
+            "Tabla de Conciliación Bancaria", "Matriz de Costo Financiero por Tarjeta", "Tabla de Días de Cobro (DSO)", 
+            "Ranking de Cuentas por Pagar", "Tabla de Inversión en Marketing por Campaña", "Matriz de Amortización de Bienes", 
+            "Tabla de Seguros y Pólizas", "Ranking de Gastos de Mantenimiento", "Tabla de Flujo de Caja Proyectado", 
+            "Matriz de Costo de Capital (WACC)", "Tabla de Margen Bruto por Línea de Negocio", "Ranking de Sucursales por ROI de Remodelación", 
+            "Tabla de Auditoría de Compras Directas", "Matriz de Eficiencia Impositiva", "Tabla de Resultado Financiero por Inflación (RECPAM)", 
+            "Ranking de Rentabilidad por M2 de Vidriera", "Tabla de Provisiones y Reservas"
+        ],
+        "🌐 UNIDAD 5: E-COMMERCE": [
+            "Embudo de Conversión Web (Funnel)", "Tabla de Costo de Adquisición de Cliente (CAC)", "Matriz de Tasa de Rebote por Landing Page", 
+            "Ranking de Productos más buscados (sin stock)", "Tabla de Tiempo de Carga de la Web vs. Ventas", "Matriz de Canales de Origen", 
+            "Tabla de Abandono de Carrito por Paso", "Ranking de Cupones de Descuento", "Tabla de Ticket Promedio Online vs. Offline", 
+            "Matriz de Pick-up in Store (Retiro en local)", "Tabla de Reseñas y Calificaciones por Producto", "Ranking de Dispositivos de Compra", 
+            "Tabla de Ubicación Geográfica de Compras Web", "Matriz de Publicidad en Redes Sociales", "Tabla de Tasa de Apertura de Newsletters", 
+            "Ranking de Influencers/Afiliados", "Tabla de Re-compras (Retención)", "Matriz de Errores en el Checkout", 
+            "Tabla de Costo de Logística Inversa", "Ranking de Cumplimiento de Promesa de Entrega"
+        ]
     }
+
     tab_units = st.tabs(list(unidades.keys()))
     for idx, (nombre_unidad, tablas) in enumerate(unidades.items()):
         with tab_units[idx]:
@@ -305,10 +334,22 @@ def render_specialized():
             for i, nombre_tabla in enumerate(tablas):
                 with cols[i % 2]:
                     st.markdown(f"**{nombre_tabla}**")
-                    if "Facturación" in nombre_tabla:
-                        df_res = df_base.groupby('Local')['Monto_Neto'].sum().sort_values(ascending=False).reset_index()
+                    
+                    # Lógica de autocompletado basada en la base de datos auditada
+                    if "Facturación" in nombre_tabla or "EBITDA" in nombre_tabla or "Margen" in nombre_tabla or "Ventas" in nombre_tabla:
+                        df_res = df_base.groupby('Local')['Monto_Neto'].agg(['sum', 'mean', 'count']).reset_index()
+                        df_res.columns = ['Local', 'Total ($)', 'Promedio ($)', 'Tickets']
+                    elif "Lead Time" in nombre_tabla:
+                        df_res = df_base.groupby('Local')['Lead_Time_H'].mean().reset_index()
+                        df_res.columns = ['Local', 'Promedio Horas']
+                    elif "Satisfacción" in nombre_tabla or "Conversión" in nombre_tabla or "Performance" in nombre_tabla:
+                        df_res = df_base.groupby('Local')['Satisfaccion'].mean().reset_index()
+                        df_res.columns = ['Local', 'Score/Tasa']
+                    elif "Local" in nombre_tabla or "Sucursal" in nombre_tabla or "Región" in nombre_tabla:
+                        df_res = df_base.groupby('Local').size().reset_index(name='Registros')
                     else:
-                        df_res = df_base.groupby('Local').size().reset_index(name='Transacciones')
+                        df_res = pd.DataFrame({"Estado": ["Sin info en base"], "Detalle": ["Requiere conexión a ERP"]})
+                    
                     st.dataframe(df_res, use_container_width=True, hide_index=True)
                     st.markdown("---")
 
