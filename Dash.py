@@ -1,6 +1,7 @@
 # ==============================================================================
-# D.A.I. - GRIMOLDI LUXURY EDITION (TRAILBLAZE AESTHETIC)
+# D.A.I. - GRIMOLDI LUXURY EDITION (INTEGRATED INTELLIGENCE)
 # Sistema de Inteligencia de Negocios - Grado Directorio
+# Estándares: Trailblaze Aesthetic + Deep Analytics + Actionable Insights
 # ==============================================================================
 
 import streamlit as st
@@ -13,7 +14,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 
 # ==============================================================================
-# 1. CONFIGURACIÓN ESTRUCTURAL (ELITE)
+# 1. CONFIGURACIÓN ESTRUCTURAL
 # ==============================================================================
 st.set_page_config(
     page_title="GRIMOLDI | Strategic Intelligence",
@@ -22,12 +23,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Inicialización de estado para navegación SPA
 if 'view' not in st.session_state: st.session_state.view = 'Home'
 if 'category' not in st.session_state: st.session_state.category = None
 
 # ==============================================================================
-# 2. MOTOR VISUAL TRAILBLAZE (CSS INJECTION)
+# 2. MOTOR VISUAL TRAILBLAZE (CSS EXPANDIDO)
 # ==============================================================================
 def inject_trailblaze_vibe():
     st.markdown("""
@@ -37,266 +37,225 @@ def inject_trailblaze_vibe():
         :root {
             --bg-deep: #0A0A0A;
             --accent-gold: #D4AF37;
-            --accent-orange: #FF4D00;
             --text-main: #FFFFFF;
             --text-dim: #A0A0A0;
             --card-bg: #161616;
-            --border-glow: rgba(212, 175, 55, 0.3);
+            --border-glow: rgba(212, 175, 55, 0.2);
         }
 
-        /* Fondo y Contenedor Principal */
-        .stApp {
-            background-color: var(--bg-deep) !important;
-            color: var(--text-main) !important;
-        }
-
-        /* Ocultar elementos nativos */
+        .stApp { background-color: var(--bg-deep) !important; color: var(--text-main) !important; }
         #MainMenu, footer, header { visibility: hidden; }
 
-        /* Estilo de la Sección HERO (Portada) */
         .hero-container {
-            padding: 100px 50px;
-            text-align: left;
+            padding: 80px 50px;
             background: linear-gradient(90deg, #0A0A0A 0%, #1a1a1a 100%);
             border-bottom: 1px solid #333;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
         
         .hero-title {
-            font-family: 'Inter', sans-serif;
-            font-weight: 900;
-            font-size: 5rem;
-            line-height: 1;
-            letter-spacing: -2px;
-            margin-bottom: 20px;
+            font-family: 'Inter', sans-serif; font-weight: 900; font-size: 5rem;
+            line-height: 1; letter-spacing: -2px; margin-bottom: 20px;
             background: linear-gradient(to right, #FFFFFF, var(--accent-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* Tarjetas de Métricas Estilo Trailblaze */
         .metric-card-custom {
-            background: var(--card-bg);
-            border: 1px solid #333;
-            border-radius: 4px;
-            padding: 40px 30px;
-            transition: all 0.4s ease;
+            background: var(--card-bg); border: 1px solid #333;
+            border-radius: 4px; padding: 40px 30px; transition: all 0.4s ease;
         }
         
         .metric-card-custom:hover {
-            border-color: var(--accent-gold);
-            box-shadow: 0 0 30px var(--border-glow);
-            transform: translateY(-5px);
+            border-color: var(--accent-gold); box-shadow: 0 0 30px var(--border-glow);
         }
 
         .metric-label {
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 2px;
-            font-size: 0.8rem;
-            margin-bottom: 15px;
+            color: var(--accent-gold); text-transform: uppercase;
+            font-weight: 700; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 15px;
         }
 
-        .metric-value {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: #FFF;
-            margin-bottom: 5px;
-        }
+        .metric-value { font-size: 3.5rem; font-weight: 900; color: #FFF; }
 
-        /* Botones Estilo Boutique */
         .stButton>button {
-            background-color: transparent !important;
-            color: var(--text-main) !important;
-            border: 2px solid var(--accent-gold) !important;
-            border-radius: 0px !important;
-            padding: 1.5rem 2rem !important;
-            font-weight: 700 !important;
-            text-transform: uppercase !important;
-            letter-spacing: 2px !important;
-            width: 100%;
-            transition: all 0.3s ease !important;
+            background-color: transparent !important; color: var(--text-main) !important;
+            border: 2px solid var(--accent-gold) !important; border-radius: 0px !important;
+            padding: 1.5rem 2rem !important; font-weight: 700 !important;
+            text-transform: uppercase !important; letter-spacing: 2px !important; width: 100%;
         }
 
-        .stButton>button:hover {
-            background-color: var(--accent-gold) !important;
-            color: #000 !important;
+        .stButton>button:hover { background-color: var(--accent-gold) !important; color: #000 !important; }
+
+        /* Contenedores de Inteligencia */
+        .tech-box {
+            background: #111; border-left: 2px solid var(--accent-gold);
+            padding: 25px; margin-top: 20px; border-radius: 0 8px 8px 0;
+        }
+        
+        .rec-box {
+            background: rgba(212, 175, 55, 0.05); border: 1px dashed var(--accent-gold);
+            padding: 25px; margin-top: 20px; border-radius: 8px;
         }
 
-        /* Bloques de Explicación (Insights) */
-        .insight-block {
-            border-left: 2px solid var(--accent-gold);
-            padding-left: 30px;
-            margin: 40px 0;
-        }
-
-        /* Personalización de Tabs */
-        .stTabs [data-baseweb="tab-list"] { background-color: transparent; }
-        .stTabs [data-baseweb="tab"] { color: var(--text-dim); border-bottom: 1px solid #333; }
-        .stTabs [aria-selected="true"] { color: var(--accent-gold) !important; border-bottom: 2px solid var(--accent-gold) !important; }
+        .stTabs [data-baseweb="tab"] { color: var(--text-dim); }
+        .stTabs [aria-selected="true"] { color: var(--accent-gold) !important; }
         </style>
     """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 3. MOTOR DE DATOS (ZSTD)
+# 3. MOTOR DE DATOS & INTELIGENCIA DE NEGOCIO
 # ==============================================================================
-@st.cache_resource
-def load_data_engine():
-    # Mantengo el estándar 4 de descompresión binaria
-    zst_path = "Grimoldi_Balance_Real.db.zst"
-    db_path = "luxury_runtime.db"
-    if os.path.exists(zst_path) and not os.path.exists(db_path):
-        with open(zst_path, 'rb') as f_in:
-            dctx = zstd.ZstdDecompressor()
-            with open(db_path, 'wb') as f_out:
-                dctx.copy_stream(f_in, f_out)
-    return sqlite3.connect(db_path, check_same_thread=False)
+def get_kpi_intelligence(kpi_name):
+    """Retorna la explicación técnica y recomendaciones para cada KPI."""
+    intel = {
+        "Ventas vs Costos": {
+            "tech": "Análisis de dispersión temporal entre ingresos brutos y egresos operativos (OPEX + COGS). Mide la eficiencia del flujo de caja.",
+            "recs": ["Optimizar la cadena de suministro para reducir COGS en un 3%.", "Revisar contratos de servicios fijos para aplanar la curva de OPEX.", "Implementar Dynamic Pricing en picos de demanda."]
+        },
+        "Market Share por Marca": {
+            "tech": "Distribución porcentual del volumen de ventas capturado por cada marca del portafolio. Detecta canibalización interna.",
+            "recs": ["Reforzar marketing en marcas con margen > 20%.", "Identificar marcas nicho para expansión de puntos de venta.", "Descontinuar SKUs de baja rotación en marcas 'Otros'."]
+        },
+        "Ticket Promedio": {
+            "tech": "Valor medio de transacción por cliente. Indica la efectividad de las estrategias de up-selling y cross-selling.",
+            "recs": ["Implementar bundles (combos) de calzado + accesorios.", "Capacitar fuerza de venta en técnicas de sugerencia premium.", "Ajustar umbral de envío gratis para incentivar mayor compra."]
+        },
+        "Productividad": {
+            "tech": "Ratio de ventas logradas por hora hombre/vendedor. Mide la eficiencia del capital humano en el salón de ventas.",
+            "recs": ["Gamificar objetivos diarios para motivar al staff.", "Redistribuir personal según mapas de calor de tráfico en tienda.", "Automatizar tareas administrativas para liberar tiempo de venta."]
+        },
+        "Rotación de Inventario": {
+            "tech": "Frecuencia con la que el stock se renueva totalmente. Un ratio alto indica agilidad; uno bajo, capital inmovilizado.",
+            "recs": ["Liquidación agresiva de stock estancado (+180 días).", "Sincronizar pedidos con previsiones meteorológicas.", "Mejorar la precisión del picking para evitar devoluciones."]
+        }
+        # Fallback genérico para otros KPIs
+    }
+    default = {
+        "tech": "Visualización multivariable del rendimiento operativo mensual frente a objetivos estratégicos establecidos por el directorio.",
+        "recs": ["Realizar auditoría de procesos en los puntos críticos detectados.", "Ajustar el presupuesto del próximo trimestre según esta tendencia.", "Escalar las mejores prácticas de las unidades líderes."]
+    }
+    return intel.get(kpi_name, default)
 
-try:
-    conn = load_data_engine()
-except:
-    pass # Fallback automático a simulación si el archivo no está presente
-
 # ==============================================================================
-# 4. COMPONENTES GRÁFICOS (VISUALIZACIÓN DE ALTO CONTRASTE)
+# 4. COMPONENTES GRÁFICOS RECUPERADOS Y MEJORADOS
 # ==============================================================================
-def draw_luxury_chart(type="sales"):
+def draw_integrated_chart(kpi_name):
     months = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
-    
     fig = go.Figure()
     
-    if type == "sales":
-        # Desglose: Ventas (Blanco) vs Costos (Oro)
-        sales = [120, 135, 125, 150, 170, 160, 180, 190, 175, 200, 220, 250]
-        costs = [80, 85, 82, 90, 105, 100, 110, 115, 108, 120, 130, 140]
-        
-        fig.add_trace(go.Scatter(x=months, y=sales, name='VENTA BRUTA', line=dict(color='#FFFFFF', width=4), fill='tozeroy', fillcolor='rgba(255,255,255,0.05)'))
-        fig.add_trace(go.Scatter(x=months, y=costs, name='COSTO OPERATIVO', line=dict(color='#D4AF37', width=2, dash='dot')))
-        title = "EFICIENCIA DE MARGEN COMERCIAL"
-        
-    elif type == "stock":
-        # Desglose: Stock vs Quiebre
-        fig.add_trace(go.Bar(x=months, y=[40, 45, 30, 50, 60, 55, 70, 75, 65, 80, 85, 90], name='STOCK', marker_color='#D4AF37'))
-        fig.add_trace(go.Bar(x=months, y=[5, 8, 12, 4, 3, 7, 2, 5, 10, 3, 2, 1], name='QUIEBRE', marker_color='#FF4D00'))
+    # Lógica de renderizado según el tipo de KPI recuperado
+    if "Ventas" in kpi_name:
+        y1 = np.random.randint(150, 250, 12)
+        y2 = y1 * 0.6 + np.random.randint(5, 15, 12)
+        fig.add_trace(go.Scatter(x=months, y=y1, name='VENTAS', line=dict(color='#FFF', width=4), fill='tozeroy'))
+        fig.add_trace(go.Scatter(x=months, y=y2, name='COSTOS', line=dict(color='#D4AF37', width=2, dash='dot')))
+    
+    elif "Market Share" in kpi_name or "Marca" in kpi_name:
+        labels = ['Hush Puppies', 'Merrell', 'Kickers', 'Vans', 'Otros']
+        fig.add_trace(go.Pie(labels=labels, values=[35, 25, 15, 15, 10], hole=0.6, marker=dict(colors=['#D4AF37', '#FFF', '#555', '#222', '#888'])))
+    
+    elif "Stock" in kpi_name or "Quiebre" in kpi_name:
+        fig.add_trace(go.Bar(x=months, y=np.random.randint(70, 100, 12), name='STOCK', marker_color='#D4AF37'))
+        fig.add_trace(go.Bar(x=months, y=np.random.randint(5, 15, 12), name='QUIEBRE', marker_color='#FF4D00'))
         fig.update_layout(barmode='stack')
-        title = "SALUD DE INVENTARIO & PÉRDIDA"
+        
+    else: # Lineal estándar para el resto
+        fig.add_trace(go.Scatter(x=months, y=np.random.normal(100, 15, 12), mode='lines+markers', line=dict(color='#D4AF37', width=3)))
 
     fig.update_layout(
-        title=dict(text=title, font=dict(size=14, color='#D4AF37', family='Inter')),
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font=dict(color='#A0A0A0'),
-        showlegend=True,
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-        margin=dict(l=0, r=0, t=50, b=0),
-        xaxis=dict(showgrid=False, zeroline=False),
-        yaxis=dict(showgrid=True, gridcolor='#222', zeroline=False)
+        paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+        font=dict(color='#A0A0A0'), showlegend=True,
+        margin=dict(l=0, r=0, t=30, b=0),
+        xaxis=dict(showgrid=False), yaxis=dict(showgrid=True, gridcolor='#222')
     )
     return fig
 
 # ==============================================================================
-# 5. RENDERIZADO DE CAPAS (AESTHETIC UPGRADE)
+# 5. RENDERIZADO DE CAPAS
 # ==============================================================================
 
-def render_metric_luxury(label, value, delta):
-    st.markdown(f"""
-        <div class="metric-card-custom">
-            <div class="metric-label">{label}</div>
-            <div class="metric-value">{value}</div>
-            <div style="color: {'#00D924' if '+' in delta else '#FF4D00'}; font-weight:700;">{delta} VS MES ANTERIOR</div>
-        </div>
-    """, unsafe_allow_html=True)
-
 def render_home():
-    # Hero Section masivo
     st.markdown("""
         <div class="hero-container">
             <div class="metric-label">Grimoldi S.A. | Executive Intelligence</div>
             <h1 class="hero-title">RESULTS<br>IN RESIDENCE.</h1>
             <p style="font-size: 1.5rem; color: #A0A0A0; max-width: 600px;">
-                Análisis quirúrgico del rendimiento corporativo. Transformando el dato binario en decisiones de alto impacto.
+                Dashboard de alta fidelidad. Recuperación total de KPIs operativos bajo el nuevo estándar visual de directorio.
             </p>
         </div>
     """, unsafe_allow_html=True)
 
-    # Métricas Principales
     m1, m2, m3 = st.columns(3)
-    with m1: render_metric_luxury("Revenue Q3", "$458.2M", "+12.4%")
-    with m2: render_metric_luxury("Net Margin", "18.5%", "+2.1%")
-    with m3: render_metric_luxury("OpEx Ratio", "34.2%", "-0.5%")
+    with m1: 
+        st.markdown('<div class="metric-card-custom"><div class="metric-label">ROI GLOBAL</div><div class="metric-value">28.4%</div><div style="color:#00D924">+3.2% ↑</div></div>', unsafe_allow_html=True)
+    with m2:
+        st.markdown('<div class="metric-card-custom"><div class="metric-label">EBITDA</div><div class="metric-value">$18.2M</div><div style="color:#00D924">+5.4% ↑</div></div>', unsafe_allow_html=True)
+    with m3:
+        st.markdown('<div class="metric-card-custom"><div class="metric-label">LIQUIDEZ</div><div class="metric-value">1.65</div><div style="color:#FF4D00">-0.1% ↓</div></div>', unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
-
-    # Navegación Boutique
-    st.markdown("<h3 style='letter-spacing:5px; font-weight:300; text-align:center;'>EXPLORE DEPARTMENTS</h3>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns(3)
-    with c1:
-        if st.button("01. COMERCIAL"): 
-            st.session_state.view = 'Category'
-            st.session_state.category = 'Comercial'
-            st.rerun()
-    with c2:
-        if st.button("02. CAPITAL HUMANO"):
-            st.session_state.view = 'Category'
-            st.session_state.category = 'Capital Humano'
-            st.rerun()
-    with c3:
-        if st.button("03. LOGÍSTICA"):
-            st.session_state.view = 'Category'
-            st.session_state.category = 'Logística'
-            st.rerun()
+    for i, (label, view) in enumerate([("01. COMERCIAL", "Comercial"), ("02. CAPITAL HUMANO", "Capital Humano"), ("03. LOGÍSTICA", "Logística")]):
+        with [c1, c2, c3][i]:
+            if st.button(label):
+                st.session_state.view = 'Category'
+                st.session_state.category = view
+                st.rerun()
 
 def render_category():
     cat = st.session_state.category
     
-    # Header minimalista
-    col_t, col_b = st.columns([3, 1])
-    with col_t:
-        st.markdown(f"<h1 style='font-weight:900; font-size:4rem;'>{cat.upper()}</h1>", unsafe_allow_html=True)
-    with col_b:
+    # Navegación Superior
+    col_t, col_b = st.columns([4, 1])
+    with col_t: st.markdown(f"<h1 style='font-weight:900; font-size:4rem;'>{cat.upper()}</h1>", unsafe_allow_html=True)
+    with col_b: 
         if st.button("CLOSE X"):
             st.session_state.view = 'Home'
             st.rerun()
 
-    st.markdown("<hr style='border-color:#333'>", unsafe_allow_html=True)
-
-    # Configuración de KPIs
-    kpi_map = {
-        "Comercial": ["Rendimiento de Ventas", "Participación de Mercado"],
-        "Capital Humano": ["Productividad", "Eficiencia de Nómina"],
-        "Logística": ["Salud de Stock", "Tiempos de Entrega"]
+    # Recuperación de los 4 KPIs por categoría
+    kpis_config = {
+        "Comercial": ["Ventas vs Costos", "Market Share por Marca", "Ticket Promedio", "Tasa de Conversión"],
+        "Capital Humano": ["Productividad", "Ratio Payroll/Ventas", "Ausentismo", "Rotación"],
+        "Logística": ["Rotación de Inventario", "Lead Time Distribución", "Flete sobre Venta", "Stock vs Quiebre"]
     }
 
-    t1, t2 = st.tabs(kpi_map[cat])
+    tabs = st.tabs(kpis_config[cat])
     
-    with t1:
-        st.markdown("<div class='insight-block'>", unsafe_allow_html=True)
-        st.markdown(f"<h3>Análisis de {kpi_map[cat][0]}</h3>", unsafe_allow_html=True)
-        g_c, d_c = st.columns([2, 1])
-        with g_c:
-            chart_type = "sales" if cat == "Comercial" else "stock"
-            st.plotly_chart(draw_luxury_chart(chart_type), use_container_width=True)
-        with d_c:
-            st.markdown(f"""
-                <p style='color:var(--text-dim); line-height:1.8;'>
-                    <strong>ANATOMÍA DEL DATO:</strong><br>
-                    La línea blanca superior representa el flujo de ingreso bruto detectado en el balance. 
-                    La zona punteada en oro delimita el costo operativo directo. 
-                    La brecha entre ambas es su margen de maniobra estratégico.
-                </p>
-                <p style='color:var(--accent-gold); font-weight:700;'>
-                    ACCIONABLE: Optimizar la brecha en un 2% proyecta un ahorro de $15M para Q4.
-                </p>
-            """, unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+    for i, kpi_name in enumerate(kpis_config[cat]):
+        with tabs[i]:
+            st.markdown(f"<h2 style='color:#FFF; margin-top:30px;'>{kpi_name}</h2>", unsafe_allow_html=True)
+            
+            # Layout: Gráfico Principal
+            st.plotly_chart(draw_integrated_chart(kpi_name), use_container_width=True)
+            
+            # Bloques de Inteligencia solicitados
+            intel = get_kpi_intelligence(kpi_name)
+            
+            col_inf1, col_inf2 = st.columns(2)
+            with col_inf1:
+                st.markdown(f"""
+                    <div class="tech-box">
+                        <h4 style="color:var(--accent-gold); margin-top:0;">🔍 EXPLICACIÓN TÉCNICA</h4>
+                        <p style="color:var(--text-dim); font-size:0.95rem;">{intel['tech']}</p>
+                    </div>
+                """, unsafe_allow_html=True)
+            
+            with col_inf2:
+                recs_html = "".join([f"<li>{r}</li>" for r in intel['recs']])
+                st.markdown(f"""
+                    <div class="rec-box">
+                        <h4 style="color:var(--accent-gold); margin-top:0;">💡 RECOMENDACIONES ESTRATÉGICAS</h4>
+                        <ul style="color:var(--text-main); font-size:0.95rem; padding-left:20px;">
+                            {recs_html}
+                        </ul>
+                    </div>
+                """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 6. ORQUESTADOR (MAIN)
+# 6. ORQUESTADOR
 # ==============================================================================
 def main():
     inject_trailblaze_vibe()
-    
     if st.session_state.view == 'Home':
         render_home()
     else:
