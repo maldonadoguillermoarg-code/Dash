@@ -6,7 +6,7 @@ import plotly.express as px
 from datetime import datetime, timedelta
 
 # ==============================================================================
-# 1. CX BRAND IDENTITY & GLOBAL CONFIG (MOBILE OPTIMIZED)
+# 1. CX BRAND IDENTITY & GLOBAL CONFIG
 # ==============================================================================
 st.set_page_config(
     page_title="GRIMOLDI CX | Intelligence System v3.0", 
@@ -36,7 +36,7 @@ if 'view' not in st.session_state: st.session_state.view = 'Home'
 if 'category' not in st.session_state: st.session_state.category = None
 
 # ==============================================================================
-# 2. CUSTOM CSS ENGINE (WITH MOBILE ADAPTATION)
+# 2. CUSTOM CSS ENGINE (OPTIMIZADO MÓVIL)
 # ==============================================================================
 def inject_cx_industrial_design():
     st.markdown(f"""
@@ -44,13 +44,13 @@ def inject_cx_industrial_design():
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
         * {{ font-family: 'Inter', sans-serif !important; }}
         .stApp {{ background-color: {CX_THEME["white"]}; }}
+        #MainMenu, footer, header {{ visibility: hidden; }}
         
-        /* Ajustes para Móviles */
+        /* Ajustes Mobile */
         @media (max-width: 768px) {{
-            .cx-card {{ padding: 15px !important; margin-bottom: 10px !important; }}
-            h1 {{ font-size: 1.5rem !important; }}
-            h2 {{ font-size: 1.2rem !important; }}
-            .money-badge {{ font-size: 0.8rem !important; }}
+            .cx-card {{ padding: 20px !important; }}
+            h1 {{ font-size: 1.6rem !important; }}
+            h2 {{ font-size: 1.3rem !important; }}
         }}
 
         .cx-card {{
@@ -65,7 +65,6 @@ def inject_cx_industrial_design():
         .pg-bar {{ background: {CX_THEME["primary"]}; height: 100%; border-radius: 20px; transition: width 0.8s ease-in-out; }}
         h1, h2, h3 {{ color: {CX_THEME["primary"]}; font-weight: 800 !important; }}
         .label-cx {{ color: {CX_THEME["neutral"]}; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }}
-        
         .data-explanation {{
             background: #F8FAFB;
             border: 1px solid #D1D9DB;
@@ -89,7 +88,7 @@ def inject_cx_industrial_design():
     """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 3. GRAFICOS (RESTAURADOS)
+# 3. COMPONENTES DE VISUALIZACIÓN
 # ==============================================================================
 def get_cx_template():
     return go.layout.Template(
@@ -138,7 +137,7 @@ def chart_dual_line(y1, y2):
     return fig
 
 # ==============================================================================
-# 4. MASTER DATA & KPI LOGIC (RESTAURADO COMPLETO)
+# 4. MASTER DATA ENGINE
 # ==============================================================================
 @st.cache_data
 def get_massive_audit_data():
@@ -223,117 +222,102 @@ KPI_MASTER_LOGIC = {
     }
 }
 
+def get_money_explanation(kpi_name, value):
+    base = MONEY_VALUATION['REVENUE_TARGET']
+    impacto_cash = (value / 100) * base
+    return f"El {value}% en {kpi_name} representa un impacto de ${impacto_cash:,.2f} ARS en el balance actual."
+
 # ==============================================================================
-# 5. RENDER FUNCTIONS (OPTIMIZED)
+# 5. RENDER FUNCTIONS
 # ==============================================================================
 def render_home():
     inject_cx_industrial_design()
     st.markdown("<h1>SISTEMA DE ANÁLISIS INTEGRAL (D.A.I.)</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='label-cx'>Consolidado Estratégico Grimoldi S.A. | Q1 2026</p>", unsafe_allow_html=True)
-    
-    k1, k2, k3, k4 = st.columns([1,1,1,1])
-    with k1: st.markdown(f'<div class="cx-card"><p class="label-cx">ROI</p><h2>28.4%</h2><span class="money-badge">$355M</span></div>', unsafe_allow_html=True)
-    with k2: st.markdown(f'<div class="cx-card"><p class="label-cx">NETO</p><h2>14.8%</h2><span class="money-badge">$185M</span></div>', unsafe_allow_html=True)
-    with k3: st.markdown(f'<div class="cx-card"><p class="label-cx">EBITDA</p><h2>18.2</h2><span class="money-badge">$227M</span></div>', unsafe_allow_html=True)
-    with k4: st.markdown(f'<div class="cx-card"><p class="label-cx">STOCK</p><h2>82%</h2><span class="money-badge">$1.025M</span></div>', unsafe_allow_html=True)
-    
+    st.markdown("<p class='label-cx'>Consolidado Estratégico Grimoldi S.A. | Inteligencia Q1 2026</p>", unsafe_allow_html=True)
+    k1, k2, k3, k4 = st.columns(4)
+    with k1: st.markdown(f'<div class="cx-card"><p class="label-cx">ROI OPERATIVO</p><h2>28.4%</h2><span class="money-badge">$355M</span></div>', unsafe_allow_html=True)
+    with k2: st.markdown(f'<div class="cx-card"><p class="label-cx">MARGEN NETO</p><h2>14.8%</h2><span class="money-badge">$185M</span></div>', unsafe_allow_html=True)
+    with k3: st.markdown(f'<div class="cx-card"><p class="label-cx">EBITDA M$</p><h2>18.2</h2><span class="money-badge">$227.5M</span></div>', unsafe_allow_html=True)
+    with k4: st.markdown(f'<div class="cx-card"><p class="label-cx">STOCK HEALTH</p><h2>82.0%</h2><span class="money-badge">$1.025M</span></div>', unsafe_allow_html=True)
     st.markdown("---")
     c_left, c_right = st.columns([1, 2])
     with c_left:
-        st.subheader("Unidades")
-        if st.button("🛒 COMERCIAL", use_container_width=True): 
-            st.session_state.view = 'Category'; st.session_state.category = 'Comercial'; st.rerun()
-        if st.button("👥 PERSONAS", use_container_width=True): 
-            st.session_state.view = 'Category'; st.session_state.category = 'Capital Humano'; st.rerun()
-        if st.button("📦 LOGÍSTICA", use_container_width=True): 
-            st.session_state.view = 'Category'; st.session_state.category = 'Logística'; st.rerun()
+        st.subheader("Unidades Estratégicas")
+        if st.button("🛒 ÁREA COMERCIAL", key="btn_comercial", use_container_width=True): st.session_state.view = 'Category'; st.session_state.category = 'Comercial'; st.rerun()
+        if st.button("👥 CAPITAL HUMANO", key="btn_rrhh", use_container_width=True): st.session_state.view = 'Category'; st.session_state.category = 'Capital Humano'; st.rerun()
+        if st.button("📦 EFICIENCIA LOGÍSTICA", key="btn_logistica", use_container_width=True): st.session_state.view = 'Category'; st.session_state.category = 'Logística'; st.rerun()
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("📊 100 TABLAS MAESTRAS", use_container_width=True): 
-            st.session_state.view = 'Specialized'; st.rerun()
-
+        if st.button("📊 UNIDADES ESPECIALIZADAS", key="btn_specialized", use_container_width=True): st.session_state.view = 'Specialized'; st.rerun()
     with c_right:
-        st.write("**Evolución de Performance**")
-        st.plotly_chart(chart_stacked_area([120, 250, 200, 450, 380, 550, 600]), use_container_width=True)
+        st.write("**Performance Histórica (Stacked Area CX)**")
+        st.plotly_chart(chart_stacked_area([120, 250, 200, 450, 380, 550, 600]), use_container_width=True, key="home_chart")
+        st.markdown(f'<div class="data-explanation"><strong>Análisis:</strong> {get_money_explanation("Revenue Anual", 15)}</div>', unsafe_allow_html=True)
 
 def render_category():
     inject_cx_industrial_design()
     cat = st.session_state.category
     st.markdown(f"<h2>EXPLORACIÓN: {cat.upper()}</h2>", unsafe_allow_html=True)
-    if st.button("↩ VOLVER AL PANEL"): st.session_state.view = 'Home'; st.rerun()
+    if st.button("↩ VOLVER AL PANEL GLOBAL"): st.session_state.view = 'Home'; st.rerun()
     
     kpis = list(KPI_MASTER_LOGIC[cat].keys())
-    tabs = st.tabs(kpis + ["Auditoría"])
+    tabs = st.tabs(kpis + ["Auditoría Maestra"])
     
     for i, kpi in enumerate(kpis):
         with tabs[i]:
             intel = KPI_MASTER_LOGIC[cat][kpi]
             c1, c2 = st.columns([2, 1])
             with c1:
-                if i == 0: st.plotly_chart(chart_dual_line([30, 45, 55, 40], [35, 40, 50, 55]), use_container_width=True)
-                elif i == 1: st.plotly_chart(chart_multi_donut(65, 45), use_container_width=True)
-                else: st.plotly_chart(chart_rounded_bar(["A", "B", "C", "D"], [80, 45, 90, 60]), use_container_width=True)
+                if i == 0: st.plotly_chart(chart_dual_line([30, 45, 55, 40], [35, 40, 50, 55]), use_container_width=True, key=f"chart_dual_{cat}_{i}")
+                elif i == 1: st.plotly_chart(chart_multi_donut(65, 45), use_container_width=True, key=f"chart_donut_{cat}_{i}")
+                elif i == 2: st.plotly_chart(chart_rounded_bar(["A", "B", "C", "D"], [80, 45, 90, 60]), use_container_width=True, key=f"chart_bar_{cat}_{i}")
+                else: st.plotly_chart(chart_radial_gauge(78), use_container_width=True, key=f"chart_gauge_{cat}_{i}")
             with c2: 
-                # RESTAURADO EL TEXTO DE ANALISIS QUE FALTABA
+                # Restaurado el texto explicativo completo
                 st.markdown(f"""
                     <div class="cx-card">
-                        <p class="label-cx">IMPACTO ESTIMADO</p>
+                        <p class="label-cx">IMPACTO ECONÓMICO</p>
                         <h2 style="color:{CX_THEME["accent"]}">{intel["money"]}</h2>
                         <hr>
                         <p><strong>Relación:</strong> {intel["relacion"]}</p>
                         <p><strong>Fórmula:</strong> <code>{intel["formula"]}</code></p>
-                        <p><strong>Nivel de Impacto:</strong> {intel["impacto"]}</p>
+                        <p><strong>Impacto:</strong> {intel["impacto"]}</p>
                     </div>
                 """, unsafe_allow_html=True)
     with tabs[-1]:
-        st.dataframe(get_massive_audit_data(), height=400, use_container_width=True)
+        df = get_massive_audit_data()
+        st.dataframe(df, height=500, use_container_width=True)
 
-# ==============================================================================
-# 8. ESPECIALIZADA (RESTORED TEXT ANALYSIS & MOBILE READY)
-# ==============================================================================
 def render_specialized():
     inject_cx_industrial_design()
-    st.markdown("<h2>DATAMASTER: 100 UNIDADES ESPECIALIZADAS</h2>", unsafe_allow_html=True)
-    if st.button("↩ VOLVER AL PANEL"): st.session_state.view = 'Home'; st.rerun()
+    st.markdown("<h2>MÓDULO DE UNIDADES ESPECIALIZADAS</h2>", unsafe_allow_html=True)
+    if st.button("↩ VOLVER AL PANEL GLOBAL"): st.session_state.view = 'Home'; st.rerun()
 
     df_base = get_massive_audit_data()
-
     unidades = {
-        "🛒 COMERCIAL Y VENTAS": ["Ranking de Facturación Bruta por Sucursal", "Tabla de Margen de Contribución por Local", "Matriz de Cumplimiento de Objetivos", "Desglose de Ticket Promedio por Región", "Tabla de Unidades por Ticket (UPT)"],
-        "👥 CAPITAL HUMANO": ["Ranking de Productividad Individual", "Tabla de Costo Laboral sobre Venta", "Matriz de Ausentismo por Sucursal", "Tabla de Horas Extra por Nodo Logístico", "Ranking de Comisiones a Liquidar"],
-        "📦 LOGÍSTICA": ["Matriz de Quiebre de Stock", "Ranking de Lead Time CD a Sucursal", "Tabla de Exactitud de Inventario (ERI)", "Matriz de Transferencias Inter-sucursales", "Tabla de Costo de Flete por Par"],
-        "💰 FINANZAS": ["Matriz de EBITDA consolidado por Local", "Tabla de Gastos Fijos (OPEX)", "Ranking de Impuestos por Jurisdicción", "Tabla de Conciliación Bancaria", "Matriz de Costo Financiero por Tarjeta"]
+        "🛒 COMERCIAL": ["Ranking de Facturación", "Tabla de Margen de Contribución", "Matriz de Objetivos"],
+        "👥 CAPITAL HUMANO": ["Productividad Individual", "Costo Laboral sobre Venta"],
+        "📦 LOGÍSTICA": ["Matriz de Quiebre de Stock", "Lead Time CD a Sucursal"]
     }
 
     tab_units = st.tabs(list(unidades.keys()))
     for idx, (nombre_unidad, tablas) in enumerate(unidades.items()):
         with tab_units[idx]:
-            st.subheader(f"Data Master: {nombre_unidad}")
             for i, nombre_tabla in enumerate(tablas):
-                # CONTENEDOR OPTIMIZADO PARA MOVILES
-                with st.expander(f"EXPANDIR: {nombre_tabla}", expanded=(i==0)):
-                    c1, c2 = st.columns([1, 1])
-                    
-                    # LOGICA DE DATOS
-                    if "Facturación" in nombre_tabla or "EBITDA" in nombre_tabla:
-                        df_res = df_base.groupby('Local')['Monto_Neto'].sum().reset_index()
-                    elif "Lead Time" in nombre_tabla:
-                        df_res = df_base.groupby('Local')['Lead_Time_H'].mean().reset_index()
-                    else:
-                        df_res = df_base.groupby('Local').size().reset_index(name='Registros')
-                    
-                    with c1:
-                        st.dataframe(df_res, use_container_width=True, hide_index=True)
-                    
-                    with c2:
-                        # RESTAURADO EL BLOQUE DE TEXTO DE ANALISIS POR TABLA
-                        st.markdown(f"""
-                            <div class="data-explanation">
-                                <strong>Análisis Técnico:</strong> Esta tabla mide la desviación estándar de la operación en 
-                                relación al target Q1. <br>
-                                <strong>Impacto:</strong> Directo sobre el flujo de caja operativo.<br>
-                                <strong>SLA Grimoldi:</strong> 95% de efectividad requerida.
-                            </div>
-                        """, unsafe_allow_html=True)
+                st.markdown(f"**{nombre_tabla}**")
+                df_res = df_base.groupby('Local')['Monto_Neto'].sum().reset_index() if "Facturación" in nombre_tabla else df_base.groupby('Local').size().reset_index(name='Total')
+                
+                col_data, col_text = st.columns([1, 1])
+                with col_data:
+                    st.dataframe(df_res, use_container_width=True, hide_index=True)
+                with col_text:
+                    # Restaurado el análisis textual por tabla
+                    st.markdown(f"""
+                        <div class="data-explanation">
+                            <strong>Contexto:</strong> Análisis de {nombre_tabla} para la unidad {nombre_unidad}.<br>
+                            <strong>Insight:</strong> La desviación detectada afecta la liquidez proyectada en el corto plazo.
+                        </div>
+                    """, unsafe_allow_html=True)
+                st.markdown("---")
 
 def main():
     if st.session_state.view == 'Home': render_home()
