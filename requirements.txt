@@ -1,0 +1,16 @@
+# --- Framework Principal ---
+streamlit==1.31.0
+
+# --- Estética y Componentes Senior (Estándar 2 y 6) ---
+streamlit-extras==0.4.0
+Pillow==10.2.0
+
+# --- Motor de Datos y Cálculo (Estándar 4 y 5) ---
+pandas==2.2.0
+numpy==1.26.3
+# Manejo del binario .zst
+zstandard==0.22.0
+
+# --- Visualización de Alta Fidelidad (Estándar 2) ---
+# Usamos graph_objects para el control total del estilo Stripe
+plotly==5.18.0
