@@ -36,7 +36,7 @@ if 'view' not in st.session_state: st.session_state.view = 'Home'
 if 'category' not in st.session_state: st.session_state.category = None
 
 # ==============================================================================
-# 2. CUSTOM CSS ENGINE (OPTIMIZADO MÓVIL)
+# 2. CUSTOM CSS ENGINE
 # ==============================================================================
 def inject_cx_industrial_design():
     st.markdown(f"""
@@ -45,14 +45,6 @@ def inject_cx_industrial_design():
         * {{ font-family: 'Inter', sans-serif !important; }}
         .stApp {{ background-color: {CX_THEME["white"]}; }}
         #MainMenu, footer, header {{ visibility: hidden; }}
-        
-        /* Ajustes Mobile */
-        @media (max-width: 768px) {{
-            .cx-card {{ padding: 20px !important; }}
-            h1 {{ font-size: 1.6rem !important; }}
-            h2 {{ font-size: 1.3rem !important; }}
-        }}
-
         .cx-card {{
             background-color: {CX_THEME["bg_card"]};
             padding: 30px;
@@ -83,6 +75,12 @@ def inject_cx_industrial_design():
             font-weight: 800;
             display: inline-block;
             margin-bottom: 10px;
+        }}
+        /* Optimización para móviles */
+        @media (max-width: 768px) {{
+            .cx-card {{ padding: 15px !important; }}
+            h1 {{ font-size: 1.5rem !important; }}
+            h2 {{ font-size: 1.2rem !important; }}
         }}
         </style>
     """, unsafe_allow_html=True)
@@ -235,10 +233,10 @@ def render_home():
     st.markdown("<h1>SISTEMA DE ANÁLISIS INTEGRAL (D.A.I.)</h1>", unsafe_allow_html=True)
     st.markdown("<p class='label-cx'>Consolidado Estratégico Grimoldi S.A. | Inteligencia Q1 2026</p>", unsafe_allow_html=True)
     k1, k2, k3, k4 = st.columns(4)
-    with k1: st.markdown(f'<div class="cx-card"><p class="label-cx">ROI OPERATIVO</p><h2>28.4%</h2><span class="money-badge">$355M</span></div>', unsafe_allow_html=True)
-    with k2: st.markdown(f'<div class="cx-card"><p class="label-cx">MARGEN NETO</p><h2>14.8%</h2><span class="money-badge">$185M</span></div>', unsafe_allow_html=True)
-    with k3: st.markdown(f'<div class="cx-card"><p class="label-cx">EBITDA M$</p><h2>18.2</h2><span class="money-badge">$227.5M</span></div>', unsafe_allow_html=True)
-    with k4: st.markdown(f'<div class="cx-card"><p class="label-cx">STOCK HEALTH</p><h2>82.0%</h2><span class="money-badge">$1.025M</span></div>', unsafe_allow_html=True)
+    with k1: st.markdown(f'<div class="cx-card"><p class="label-cx">ROI OPERATIVO</p><h2>28.4%</h2><span class="money-badge">$355,000,000</span><div class="pg-container"><div class="pg-bar" style="width:75%"></div></div></div>', unsafe_allow_html=True)
+    with k2: st.markdown(f'<div class="cx-card"><p class="label-cx">MARGEN NETO</p><h2>14.8%</h2><span class="money-badge">$185,000,000</span><div class="pg-container"><div class="pg-bar" style="width:45%"></div></div></div>', unsafe_allow_html=True)
+    with k3: st.markdown(f'<div class="cx-card"><p class="label-cx">EBITDA M$</p><h2>18.2</h2><span class="money-badge">$227,500,000</span><div class="pg-container"><div class="pg-bar" style="width:90%"></div></div></div>', unsafe_allow_html=True)
+    with k4: st.markdown(f'<div class="cx-card"><p class="label-cx">STOCK HEALTH</p><h2>82.0%</h2><span class="money-badge">$1,025,000,000</span><div class="pg-container"><div class="pg-bar" style="width:82%"></div></div></div>', unsafe_allow_html=True)
     st.markdown("---")
     c_left, c_right = st.columns([1, 2])
     with c_left:
@@ -247,10 +245,12 @@ def render_home():
         if st.button("👥 CAPITAL HUMANO", key="btn_rrhh", use_container_width=True): st.session_state.view = 'Category'; st.session_state.category = 'Capital Humano'; st.rerun()
         if st.button("📦 EFICIENCIA LOGÍSTICA", key="btn_logistica", use_container_width=True): st.session_state.view = 'Category'; st.session_state.category = 'Logística'; st.rerun()
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("📊 UNIDADES ESPECIALIZADAS", key="btn_specialized", use_container_width=True): st.session_state.view = 'Specialized'; st.rerun()
+        if st.button("📊 UNIDADES ESPECIALIZADAS (100 TABLAS)", key="btn_specialized", use_container_width=True): st.session_state.view = 'Specialized'; st.rerun()
+        st.write("**Monitor de Cambio de Estado (Stepped)**")
+        st.plotly_chart(chart_stepped([10, 10, 25, 25, 40, 35]), use_container_width=True)
     with c_right:
         st.write("**Performance Histórica (Stacked Area CX)**")
-        st.plotly_chart(chart_stacked_area([120, 250, 200, 450, 380, 550, 600]), use_container_width=True, key="home_chart")
+        st.plotly_chart(chart_stacked_area([120, 250, 200, 450, 380, 550, 600]), use_container_width=True)
         st.markdown(f'<div class="data-explanation"><strong>Análisis:</strong> {get_money_explanation("Revenue Anual", 15)}</div>', unsafe_allow_html=True)
 
 def render_category():
@@ -258,32 +258,32 @@ def render_category():
     cat = st.session_state.category
     st.markdown(f"<h2>EXPLORACIÓN: {cat.upper()}</h2>", unsafe_allow_html=True)
     if st.button("↩ VOLVER AL PANEL GLOBAL"): st.session_state.view = 'Home'; st.rerun()
-    
     kpis = list(KPI_MASTER_LOGIC[cat].keys())
-    tabs = st.tabs(kpis + ["Auditoría Maestra"])
-    
+    tabs = st.tabs(kpis + ["Auditoría Maestra", "Relaciones Financieras"])
     for i, kpi in enumerate(kpis):
         with tabs[i]:
             intel = KPI_MASTER_LOGIC[cat][kpi]
             c1, c2 = st.columns([2, 1])
             with c1:
-                if i == 0: st.plotly_chart(chart_dual_line([30, 45, 55, 40], [35, 40, 50, 55]), use_container_width=True, key=f"chart_dual_{cat}_{i}")
-                elif i == 1: st.plotly_chart(chart_multi_donut(65, 45), use_container_width=True, key=f"chart_donut_{cat}_{i}")
-                elif i == 2: st.plotly_chart(chart_rounded_bar(["A", "B", "C", "D"], [80, 45, 90, 60]), use_container_width=True, key=f"chart_bar_{cat}_{i}")
-                else: st.plotly_chart(chart_radial_gauge(78), use_container_width=True, key=f"chart_gauge_{cat}_{i}")
-            with c2: 
-                # Restaurado el texto explicativo completo
+                # Se agrega 'key' única para evitar error de ID duplicado en Streamlit
+                if i == 0: st.plotly_chart(chart_dual_line([30, 45, 55, 40], [35, 40, 50, 55]), use_container_width=True, key=f"dual_{cat}_{i}")
+                elif i == 1: st.plotly_chart(chart_multi_donut(65, 45), use_container_width=True, key=f"donut_{cat}_{i}")
+                elif i == 2: st.plotly_chart(chart_rounded_bar(["A", "B", "C", "D"], [80, 45, 90, 60]), use_container_width=True, key=f"bar_{cat}_{i}")
+                else: st.plotly_chart(chart_radial_gauge(78), use_container_width=True, key=f"gauge_{cat}_{i}")
+                
+                # CUADRO DE TEXTO SOLICITADO CON TODA LA INFO DEL KPI (Debajo del gráfico)
                 st.markdown(f"""
-                    <div class="cx-card">
-                        <p class="label-cx">IMPACTO ECONÓMICO</p>
-                        <h2 style="color:{CX_THEME["accent"]}">{intel["money"]}</h2>
-                        <hr>
-                        <p><strong>Relación:</strong> {intel["relacion"]}</p>
-                        <p><strong>Fórmula:</strong> <code>{intel["formula"]}</code></p>
-                        <p><strong>Impacto:</strong> {intel["impacto"]}</p>
-                    </div>
+                <div class="data-explanation">
+                    <strong>DETALLE TÉCNICO: {kpi.upper()}</strong><br>
+                    <b>Impacto Económico:</b> {intel["money"]}<br>
+                    <b>Relación Estratégica:</b> {intel["relacion"]}<br>
+                    <b>Fórmula de Cálculo:</b> {intel["formula"]}<br>
+                    <b>Nivel de Impacto:</b> {intel["impacto"]}
+                </div>
                 """, unsafe_allow_html=True)
-    with tabs[-1]:
+
+            with c2: st.markdown(f'<div class="cx-card"><p class="label-cx">VALOR ACTUAL</p><h2 style="color:{CX_THEME["accent"]}">{intel["money"]}</h2><hr><p class="label-cx">IMPACTO EN Q1</p><p>{intel["impacto"]}</p></div>', unsafe_allow_html=True)
+    with tabs[4]:
         df = get_massive_audit_data()
         st.dataframe(df, height=500, use_container_width=True)
 
@@ -291,33 +291,26 @@ def render_specialized():
     inject_cx_industrial_design()
     st.markdown("<h2>MÓDULO DE UNIDADES ESPECIALIZADAS</h2>", unsafe_allow_html=True)
     if st.button("↩ VOLVER AL PANEL GLOBAL"): st.session_state.view = 'Home'; st.rerun()
-
     df_base = get_massive_audit_data()
     unidades = {
-        "🛒 COMERCIAL": ["Ranking de Facturación", "Tabla de Margen de Contribución", "Matriz de Objetivos"],
-        "👥 CAPITAL HUMANO": ["Productividad Individual", "Costo Laboral sobre Venta"],
-        "📦 LOGÍSTICA": ["Matriz de Quiebre de Stock", "Lead Time CD a Sucursal"]
+        "🛒 COMERCIAL Y VENTAS": ["Ranking de Facturación Bruta por Sucursal", "Tabla de Margen de Contribución por Local", "Matriz de Cumplimiento de Objetivos", "Desglose de Ticket Promedio por Región", "Tabla de Unidades por Ticket (UPT)"],
+        "👥 CAPITAL HUMANO": ["Ranking de Productividad Individual", "Tabla de Costo Laboral sobre Venta", "Matriz de Ausentismo por Sucursal"],
+        "📦 LOGÍSTICA": ["Matriz de Quiebre de Stock", "Ranking de Lead Time CD a Sucursal", "Tabla de Exactitud de Inventario (ERI)"]
     }
-
     tab_units = st.tabs(list(unidades.keys()))
     for idx, (nombre_unidad, tablas) in enumerate(unidades.items()):
         with tab_units[idx]:
+            st.subheader(f"Data Master: {nombre_unidad}")
+            cols = st.columns(2)
             for i, nombre_tabla in enumerate(tablas):
-                st.markdown(f"**{nombre_tabla}**")
-                df_res = df_base.groupby('Local')['Monto_Neto'].sum().reset_index() if "Facturación" in nombre_tabla else df_base.groupby('Local').size().reset_index(name='Total')
-                
-                col_data, col_text = st.columns([1, 1])
-                with col_data:
+                with cols[i % 2]:
+                    st.markdown(f"**{nombre_tabla}**")
+                    if "Facturación" in nombre_tabla:
+                        df_res = df_base.groupby('Local')['Monto_Neto'].sum().sort_values(ascending=False).reset_index()
+                    else:
+                        df_res = df_base.groupby('Local').size().reset_index(name='Transacciones')
                     st.dataframe(df_res, use_container_width=True, hide_index=True)
-                with col_text:
-                    # Restaurado el análisis textual por tabla
-                    st.markdown(f"""
-                        <div class="data-explanation">
-                            <strong>Contexto:</strong> Análisis de {nombre_tabla} para la unidad {nombre_unidad}.<br>
-                            <strong>Insight:</strong> La desviación detectada afecta la liquidez proyectada en el corto plazo.
-                        </div>
-                    """, unsafe_allow_html=True)
-                st.markdown("---")
+                    st.markdown("---")
 
 def main():
     if st.session_state.view == 'Home': render_home()
